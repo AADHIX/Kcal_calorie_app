@@ -1,5 +1,14 @@
 import 'dart:io';
+import 'package:calory/src/common_widgets/meal_selection_row.dart';
+import 'package:calory/src/constants/colors.dart';
+import 'package:calory/src/features/authentication/screens/add_nutrients_screen/add_nutrients.dart';
+import 'package:calory/src/features/authentication/screens/get_activity_level_screen/activity_level_screen.dart';
+import 'package:calory/src/features/authentication/screens/get_profile_screen/get_profile_screen.dart';
+import 'package:calory/src/features/authentication/screens/meal_planner/food_selection_screen.dart';
+import 'package:calory/src/features/authentication/screens/meal_planner/meal_schedule_screen.dart';
 import 'package:calory/src/features/authentication/screens/scan_food_screen/scan_food.dart';
+import 'package:calory/src/features/authentication/screens/splash_screen/splash_screen.dart';
+import 'package:calory/src/features/authentication/screens/welcome_screen/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,14 +24,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Flutter Form to Android',
-      home: ScanFood(),
+      debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.system,
+      home: FoodSelectionScreen(),
     );
   }
 }
 
 
-class FormScreen extends StatefulWidget {
+/*class FormScreen extends StatefulWidget {
   @override
   _FormScreenState createState() => _FormScreenState();
 }
@@ -130,7 +140,7 @@ class FormDataChannel {    // image channel
       print("Failed to submit form data: '${e.message}'.");
     }
   }
-}
+}*/
 //
 
 

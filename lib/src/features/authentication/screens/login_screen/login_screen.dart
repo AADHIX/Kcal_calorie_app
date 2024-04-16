@@ -1,5 +1,6 @@
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../../common_widgets/highlighted_rtextfield.dart';
 import '../../../../constants/colors.dart';
@@ -196,3 +197,18 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+/*class LoginDataChannel {
+  // nutrients channel
+  static const MethodChannel _channel = MethodChannel('login_data_channel');
+
+  static Future<void> submitLoginData(
+      String username, String password) async {
+    try {
+      await _channel.invokeMethod(
+          'submitLoginData', {"username": username, "password": password});
+    } on PlatformException catch (e) {
+      print("Failed to submit form data: '${e.message}'.");
+    }
+  }
+}*/

@@ -5,6 +5,7 @@ const String foodCalorie = "assets/images/food-calorie.png";
 const String homeIcon = "assets/images/home-screen-icon.png";
 const String homeIcon1 = "assets/images/homeIcon1.png";
 const String startUp = "assets/images/startup-img.png";
+const String welcomeImg = "assets/images/welcomescreen3.png";
 const String proScreenImg = "assets/images/get-profile-screen.png";
 //logo
 const String googleIcon = "assets/logo/google-logo.png";
@@ -27,4 +28,9 @@ const String cameraTab = "assets/images/camera_tab.png";
 const String cameraSelect = "assets/images/camera_tab_select.png";
 const String profileTab = "assets/images/profile_tab.png";
 const String profileSelect = "assets/images/profile_tab_select.png";
+
+//nutrients add
+const String proteinIcon = "assets/icons/chicken-leg.png";
+const String carbsIcon = "assets/icons/carbohydrates.png";
+const String fatIcon = "assets/icons/fat-food.png";
 

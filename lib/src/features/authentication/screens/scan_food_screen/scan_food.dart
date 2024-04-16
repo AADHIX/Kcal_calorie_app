@@ -1,21 +1,24 @@
+import 'package:calory/src/common_widgets/round_button.dart';
+import 'package:calory/src/constants/text_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../../common_widgets/highlighted_rtextfield.dart';
 import '../../../../constants/colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 import 'dart:ui' as ui;
 
-class ScanFood extends StatefulWidget {
-  const ScanFood({super.key});
+import '../../../../constants/sizes.dart';
 
+class ScanFood extends StatefulWidget {
   @override
-  State<ScanFood> createState() => _ScanFoodState();
+  _ScanFoodState createState() => _ScanFoodState();
 }
 
 class _ScanFoodState extends State<ScanFood> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _textController = TextEditingController();
-  TextEditingController _textController1 = TextEditingController();
+  TextEditingController _foodWeightController = TextEditingController();
+  TextEditingController _foodNameController = TextEditingController();
   late CameraController _cameraController;
   Uint8List? _imagefile;
 
@@ -42,8 +45,8 @@ class _ScanFoodState extends State<ScanFood> {
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      String weight = _textController.text;
-      String name = _textController1.text;
+      String weight = _foodWeightController.text;
+      String name = _foodNameController.text;
       FormDataChannel.submitFormData(weight, name, _imagefile);
     }
   }
@@ -84,15 +87,44 @@ class _ScanFoodState extends State<ScanFood> {
         ],
       ),
       backgroundColor: TColor.white,
-      body: SingleChildScrollView(
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: ListView(
-            children: <Widget>[
-              TextFormField(
-                controller: _textController,
-                decoration:
-                    InputDecoration(labelText: 'Enter Your Food Weight'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HighlightRoundTextField(
+                keyboardType: TextInputType.text,
+                labelText: fWeight,
+                controller: _foodWeightController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some value';
+                  }
+                  return null;
+                },
+                prefixIcon: const Icon(
+                    Icons.production_quantity_limits_outlined,
+                    color: darkColor),
+              ),
+              const SizedBox(height: defaultSize),
+              HighlightRoundTextField(
+                keyboardType: TextInputType.text,
+                labelText: fName,
+                controller: _foodNameController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some value';
+                  }
+                  return null;
+                },
+                prefixIcon:
+                    const Icon(Icons.fastfood_outlined, color: darkColor),
+              ),
+              /*TextFormField(
+                controller: _foodWeightController,
+                decoration: InputDecoration(labelText: 'Enter Your Food Weight'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some value';
@@ -101,7 +133,7 @@ class _ScanFoodState extends State<ScanFood> {
                 },
               ),
               TextFormField(
-                controller: _textController1,
+                controller: _foodNameController,
                 decoration: InputDecoration(labelText: 'Enter Your Food'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -114,7 +146,9 @@ class _ScanFoodState extends State<ScanFood> {
               ElevatedButton(
                 onPressed: _submitForm,
                 child: Text('Submit'),
-              ),
+              ),*/
+              SizedBox(height: 100),
+              RoundButton(title: submit, onPressed: _submitForm),
             ],
           ),
         ),

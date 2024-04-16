@@ -1,4 +1,6 @@
+import 'package:calory/src/features/authentication/screens/get_activity_level_screen/activity_level_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../../../../common_widgets/round_textfield.dart';
 import '../../../../constants/colors.dart';
@@ -16,19 +18,21 @@ class GetProfileScreen extends StatefulWidget {
 }
 
 class _GetProfileScreen extends State<GetProfileScreen> {
-
   TextEditingController txtDate = TextEditingController();
   TextEditingController txtWeight = TextEditingController();
   TextEditingController txtHeight = TextEditingController();
   TextEditingController txtGender = TextEditingController();
   TextEditingController txtPhoneNum = TextEditingController();
+  TextEditingController txtAge = TextEditingController();
 
   List<Map<String, dynamic>> genders = [
     {"name": "Male", "icon": Icons.male},
-    {"name": "Female", "icon": Icons.female},
-    {"name": "Other", "icon": Icons.transgender},
+    {"name": "Female", "icon": Icons.female}
   ];
-  String? selectedGender;
+  String selectedGender = 'Male';
+  int selectedAge = 20;
+  double selectedHeight = 120.0;
+  double selectedWeight = 50.0;
 
   bool isButtonEnabled = false;
 
@@ -38,7 +42,8 @@ class _GetProfileScreen extends State<GetProfileScreen> {
           txtWeight.text.isNotEmpty &&
           txtHeight.text.isNotEmpty &&
           txtGender.text.isNotEmpty &&
-          txtPhoneNum.text.isNotEmpty;
+          txtPhoneNum.text.isNotEmpty &&
+          txtAge.text.isNotEmpty;
     });
   }
 
@@ -52,7 +57,8 @@ class _GetProfileScreen extends State<GetProfileScreen> {
     if (picked != null) {
       final formattedDate = DateFormat('dd/MM/yyyy').format(picked);
       setState(() {
-        txtDate.text = formattedDate;// Update the text field with the selected date
+        txtDate.text =
+            formattedDate; // Update the text field with the selected date
         checkFields();
       });
     }
@@ -86,12 +92,13 @@ class _GetProfileScreen extends State<GetProfileScreen> {
             mainAxisSize: MainAxisSize.min,
             children: genders
                 .map((gender) => ListTile(
-              leading: Icon(gender['icon'], color: Colors.black),
-              title: Text(gender['name'], style: TextStyle(color: Colors.black)),
-              onTap: () {
-                Navigator.pop(context, gender['name']);
-              },
-            ))
+                      leading: Icon(gender['icon'], color: Colors.black),
+                      title: Text(gender['name'],
+                          style: TextStyle(color: Colors.black)),
+                      onTap: () {
+                        Navigator.pop(context, gender['name']);
+                      },
+                    ))
                 .toList(),
           ),
         );
@@ -118,7 +125,8 @@ class _GetProfileScreen extends State<GetProfileScreen> {
             padding: const EdgeInsets.all(15.0),
             child: Column(
               children: [
-                Image(image: const AssetImage(proScreenImg),
+                Image(
+                  image: const AssetImage(proScreenImg),
                   width: media.width,
                   fit: BoxFit.fitWidth,
                 ),
@@ -174,8 +182,20 @@ class _GetProfileScreen extends State<GetProfileScreen> {
                         icon: dobIcon,
                         readOnly: true,
                         onTap: () {
-                          _selectDate(context); // Open DatePicker when the text field is tapped
+                          _selectDate(
+                              context); // Open DatePicker when the text field is tapped
                         },
+                      ),
+                      SizedBox(
+                        height: media.width * 0.04,
+                      ),
+                      RoundTextField(
+                        controller: txtAge,
+                        hitText: age,
+                        keyboardType: TextInputType.number,
+                        onChanged: (_) => checkFields(),
+                        icon: genderIcon,
+                        readOnly: false,
                       ),
                       SizedBox(
                         height: media.width * 0.04,
@@ -199,41 +219,38 @@ class _GetProfileScreen extends State<GetProfileScreen> {
                         hitText: "Your Height",
                         icon: heightIcon,
                         readOnly: true,
-                        onTap: (){
+                        onTap: () {
                           _selectHeight(context);
                         },
                       ),
                       SizedBox(
                         height: media.width * 0.07,
                       ),
-                      /*RoundButton(
-                          title: "Next >",
-
-                          onPressed: isButtonEnabled ? () {
-                            print('haii');
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  const MainTabView()),
-                            );
-                          } : null,
-                      ),*/
                       SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: isButtonEnabled ? accentColor : Colors.transparent,
-                                foregroundColor: isButtonEnabled ? darkColor : Colors.transparent,),
-                            onPressed: isButtonEnabled ? () {
-                              print('haii');
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                    const MainTabView()),
-                              );
-                            } : null,
+                              backgroundColor: isButtonEnabled
+                                  ? accentColor
+                                  : Colors.transparent,
+                              foregroundColor: isButtonEnabled
+                                  ? darkColor
+                                  : Colors.transparent,
+                            ),
+                            onPressed: isButtonEnabled
+                                ? () {
+                              selectedGender = txtGender.text;
+                              selectedAge = int.parse(txtAge.text);
+                              selectedWeight = double.parse(txtWeight.text);
+                              selectedHeight = double.parse(txtHeight.text);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                               ActivityLevelScreen(selectedGender: selectedGender, selectedAge: selectedAge, selectedWeight: selectedWeight, selectedHeight: selectedHeight)),
+                                    );
+                                  }
+                                : null,
                             child: const Text(
                               "Next >",
                               style: TextStyle(color: whiteColor),
@@ -250,3 +267,17 @@ class _GetProfileScreen extends State<GetProfileScreen> {
     );
   }
 }
+
+/*class GetProfileDataChannel {
+  static const MethodChannel _channel = MethodChannel('get_profile_data_channel');
+
+  static Future<void> submitGetProfileData(
+      String gender, DateTime dob, int number, double weight, double height) async {
+    try {
+      await _channel.invokeMethod(
+          'submitGetProfileData', {"gender": gender, "dob": dob, "number": number, "weight": weight, "height": height});
+    } on PlatformException catch (e) {
+      print("Failed to submit form data: '${e.message}'.");
+    }
+  }
+}*/

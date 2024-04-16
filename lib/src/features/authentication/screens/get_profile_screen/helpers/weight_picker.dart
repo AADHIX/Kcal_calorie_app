@@ -38,7 +38,7 @@ class _WeightPickerState extends State<WeightPicker> {
         TextButton(
           onPressed: () {
             // Update the controller with the selected weight
-            widget.controller.text = '$_selectedWeight kg';
+            widget.controller.text = '$_selectedWeight';
             Navigator.pop(context);
           },
           child: Text('OK'),

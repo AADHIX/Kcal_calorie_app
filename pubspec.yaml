@@ -45,6 +45,12 @@ dependencies:
   animated_toggle_switch: ^0.6.2
   art_sweetalert: ^0.0.5
   animations: ^2.0.11
+  carousel_slider: ^4.2.1
+  calendar_agenda:
+    path: dev_lib/calendar_agenda/
+  simple_animation_progress_bar: ^1.6.0
+  anim_search_bar: ^2.0.3
+  animation_search_bar: ^0.0.10
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +84,12 @@ flutter:
     - assets/logo/
     - assets/icons/
     - assets/gif/
+
+  fonts:
+    - family: Viga
+    - fonts:
+        - asset: assets/fonts/Mulish-Light.ttf
+        - asset: assets/fonts/Mulish-SemiBold.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

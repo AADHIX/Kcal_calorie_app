@@ -92,7 +92,7 @@ class _MainTabViewState extends State<MainTabView> {
                 isActive: selectTab == 2,
                 onTap: () {
                   selectTab = 2;
-                   currentTab = const ScanFood();
+                   currentTab = ScanFood();
                   if (mounted) {
                     setState(() {});
                   }

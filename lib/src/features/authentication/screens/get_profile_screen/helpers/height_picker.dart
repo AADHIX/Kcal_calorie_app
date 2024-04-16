@@ -38,7 +38,7 @@ class _HeightPickerState extends State<HeightPicker> {
         TextButton(
           onPressed: () {
             // Update the controller with the selected weight
-            widget.controller.text = '$_selectedHeight cm';
+            widget.controller.text = '$_selectedHeight';
             Navigator.pop(context);
           },
           child: Text('OK'),

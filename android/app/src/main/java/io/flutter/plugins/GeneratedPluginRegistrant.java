@@ -30,5 +30,10 @@ public final class GeneratedPluginRegistrant {
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin image_picker_android, io.flutter.plugins.imagepicker.ImagePickerPlugin", e);
     }
+    try {
+      flutterEngine.getPlugins().add(new com.example.simple_aniatiom_progress_bar.simple_animation_progress_bar.SimpleAnimationProgressBarPlugin());
+    } catch (Exception e) {
+      Log.e(TAG, "Error registering plugin simple_animation_progress_bar, com.example.simple_aniatiom_progress_bar.simple_animation_progress_bar.SimpleAnimationProgressBarPlugin", e);
+    }
   }
 }
