@@ -1,3 +1,4 @@
+import 'package:calory/src/common/channels/dart_to_java_channels/signUp_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../common/validation/validation.dart';
@@ -171,6 +172,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                   foregroundColor: darkColor),
                               onPressed: () {
                                 if (formField.currentState!.validate()) {
+
+                                  String username = nameController.text;
+                                  String emailTxt = emailController.text;
+                                  String password = passController.text;
+                                  SignUpDataChannel.submitSignUpData(username, emailTxt, password);
+
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

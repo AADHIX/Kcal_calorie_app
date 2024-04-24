@@ -1,4 +1,5 @@
 import 'package:art_sweetalert/art_sweetalert.dart';
+import 'package:calory/src/common/channels/dart_to_java_channels/login_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -137,10 +138,32 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: accentColor,
                                   foregroundColor: darkColor),
-                              onPressed: () {
+                              onPressed: () async {
                                 String name = nameController.text.trim();
                                 String password = passController.text.trim();
+
+                                bool isTrue =
+                                    await LoginDataChannel.submitLoginData(
+                                        name, password);
+
                                 if (formField.currentState!.validate() &&
+                                    isTrue) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MainTabView()),
+                                  );
+                                } else {
+                                  ArtSweetAlert.show(
+                                      context: context,
+                                      artDialogArgs: ArtDialogArgs(
+                                          type: ArtSweetAlertType.danger,
+                                          title: "Oops...",
+                                          text:
+                                              "Incorrect Username or Password"));
+                                }
+                                /*if (formField.currentState!.validate() &&
                                     name == "Gokul" &&
                                     password == "Gokul@123") {
                                   Navigator.push(
@@ -160,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           title: "Oops...",
                                           text:
                                               "Incorrect Username or Password"));
-                                }
+                                }*/
                               },
                               child: Text(
                                 login.toUpperCase(),

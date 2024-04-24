@@ -1,4 +1,5 @@
 import 'package:calory/src/features/authentication/screens/main_tab/select_view.dart';
+import 'package:calory/src/features/authentication/screens/meal_planner/meal_schedule_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../../common_widgets/tab_button.dart';
 import '../../../../constants/colors.dart';
@@ -31,7 +32,7 @@ class _MainTabViewState extends State<MainTabView> {
         child: InkWell(
           onTap: () {
             selectTab = 4;
-            currentTab = const AddNutrients();
+            currentTab = const MealScheduleScreen();
             if (mounted) {
               setState(() {});
             }

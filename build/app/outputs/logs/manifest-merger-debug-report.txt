@@ -34,6 +34,7 @@ MERGED from C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\android\
 MERGED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-21:12
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:simple_animation_progress_bar] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\simple_animation_progress_bar\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:flutter_keyboard_visibility] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\flutter_keyboard_visibility\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:camera] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\camera\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-12:12
 MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\gokul\.gradle\caches\transforms-3\d16d53746166143fe30054cbfe559e31\transformed\fragment-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.activity:activity:1.7.2] C:\Users\gokul\.gradle\caches\transforms-3\7e30f4b09ad63b0fe951adc42de2658a\transformed\jetified-activity-1.7.2\AndroidManifest.xml:17:1-22:12
@@ -103,6 +104,8 @@ MERGED from [:flutter_plugin_android_lifecycle] C:\Users\gokul\Downloads\calory-
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:simple_animation_progress_bar] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\simple_animation_progress_bar\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:simple_animation_progress_bar] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\simple_animation_progress_bar\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_keyboard_visibility] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\flutter_keyboard_visibility\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_keyboard_visibility] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\flutter_keyboard_visibility\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:camera] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\camera\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:camera] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\camera\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\gokul\.gradle\caches\transforms-3\d16d53746166143fe30054cbfe559e31\transformed\fragment-1.1.0\AndroidManifest.xml:20:5-22:41

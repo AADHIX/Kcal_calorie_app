@@ -49,8 +49,10 @@ dependencies:
   calendar_agenda:
     path: dev_lib/calendar_agenda/
   simple_animation_progress_bar: ^1.6.0
-  anim_search_bar: ^2.0.3
-  animation_search_bar: ^0.0.10
+  flutter_typeahead: ^5.2.0
+  gauge_indicator: ^0.4.3
+  bounce: ^1.0.2
+
 
 dev_dependencies:
   flutter_test:

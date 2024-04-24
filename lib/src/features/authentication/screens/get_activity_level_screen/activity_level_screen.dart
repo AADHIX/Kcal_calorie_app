@@ -1,4 +1,5 @@
 import 'package:calory/src/features/authentication/screens/get_activity_level_screen/helpers/calculate_bmr.dart';
+import 'package:calory/src/features/authentication/screens/login_screen/login_screen.dart';
 import 'package:calory/src/features/authentication/screens/main_tab/main_tab_view.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -159,7 +160,7 @@ class _ActivityLevelScreenState extends State<ActivityLevelScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const MainTabView()),
+                            builder: (context) => const LoginScreen()),
                       );
                     },
                   ),

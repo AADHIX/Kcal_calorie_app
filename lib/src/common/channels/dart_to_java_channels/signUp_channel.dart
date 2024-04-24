@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 class SignUpDataChannel {
   static const MethodChannel _channel = MethodChannel('signup_data_channel');
 
-  static Future<void> submitNutrientsData(
+  static Future<void> submitSignUpData(
       String username, String email, String password) async {
     try {
       await _channel.invokeMethod(

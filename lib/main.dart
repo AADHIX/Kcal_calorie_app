@@ -1,19 +1,12 @@
-import 'dart:io';
-import 'package:calory/src/common_widgets/meal_selection_row.dart';
-import 'package:calory/src/constants/colors.dart';
 import 'package:calory/src/features/authentication/screens/add_nutrients_screen/add_nutrients.dart';
-import 'package:calory/src/features/authentication/screens/get_activity_level_screen/activity_level_screen.dart';
+import 'package:calory/src/features/authentication/screens/get_profile_screen/get_gender_screen.dart';
 import 'package:calory/src/features/authentication/screens/get_profile_screen/get_profile_screen.dart';
-import 'package:calory/src/features/authentication/screens/meal_planner/food_selection_screen.dart';
-import 'package:calory/src/features/authentication/screens/meal_planner/meal_schedule_screen.dart';
-import 'package:calory/src/features/authentication/screens/scan_food_screen/scan_food.dart';
+import 'package:calory/src/features/authentication/screens/home_screen/home_view.dart';
+import 'package:calory/src/features/authentication/screens/main_tab/main_tab_view.dart';
+import 'package:calory/src/features/authentication/screens/signup_screen/signup_screen.dart';
 import 'package:calory/src/features/authentication/screens/splash_screen/splash_screen.dart';
-import 'package:calory/src/features/authentication/screens/welcome_screen/welcome_screen.dart';
+import 'package:calory/src/features/authentication/screens/water_screen/water_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:camera/camera.dart';
-import 'dart:ui' as ui;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +19,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
-      home: FoodSelectionScreen(),
+      home: HomeView(),
     );
   }
 }

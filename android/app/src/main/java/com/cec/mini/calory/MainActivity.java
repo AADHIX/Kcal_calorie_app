@@ -8,6 +8,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.cec.mini.calory.constants.HomeDataHandler;
+import com.cec.mini.calory.constants.LoginDataHandler;
+import com.cec.mini.calory.constants.SignUpDataHandler;
 import com.cec.mini.calory.helper.MLHelper;
 import com.cec.mini.calory.helper.NutritionHelper;
 import com.cec.mini.calory.models.Nutrition;
@@ -26,11 +29,30 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class MainActivity extends FlutterActivity {
 
-
+    private static final String SIGNUP_CHANNEL = "signup_data_channel";
+    private static final String LOGIN_CHANNEL = "login_data_channel";
+    private static final String HOME_CHANNEL = "home_data_channel";
 
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
+
+        // Create and set up the SignUpDataHandler instance for the SIGNUP_CHANNEL
+        SignUpDataHandler signUpDataHandler = new SignUpDataHandler(this);
+        new MethodChannel(flutterEngine.getDartExecutor(), SIGNUP_CHANNEL)
+                .setMethodCallHandler(signUpDataHandler);
+
+        // Create and set up the LoginDataHandler instance for the LOGIN_CHANNEL
+        LoginDataHandler loginDataHandler = new LoginDataHandler(this);
+        new MethodChannel(flutterEngine.getDartExecutor(), LOGIN_CHANNEL)
+                .setMethodCallHandler(loginDataHandler);
+
+        // Create and set up the HomeDataHandler instance for the LOGIN_CHANNEL
+        HomeDataHandler homeDataHandler = new HomeDataHandler(this);
+        new MethodChannel(flutterEngine.getDartExecutor(), HOME_CHANNEL)
+                .setMethodCallHandler(homeDataHandler);
+
+
         String channel = "form_data_channel";
         String[] labels = getLabels();
         new MethodChannel(flutterEngine.getDartExecutor(), channel).setMethodCallHandler(
@@ -88,4 +110,7 @@ public class MainActivity extends FlutterActivity {
         }
         return labels;
     }
+
+
+
 }

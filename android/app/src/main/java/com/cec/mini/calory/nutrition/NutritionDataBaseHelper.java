@@ -23,7 +23,7 @@ public class NutritionDataBaseHelper {
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     public NutritionDataBaseHelper(Context context) {
-        dbhandler=new DatabaseConfiguration(context);
+        dbhandler=new LoginDatabase(context);
         database = dbhandler.getWritableDatabase();
     }
 

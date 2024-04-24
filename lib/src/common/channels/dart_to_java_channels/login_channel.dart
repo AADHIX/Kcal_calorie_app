@@ -1,16 +1,29 @@
 import 'package:flutter/services.dart';
 
 class LoginDataChannel {
-  // nutrients channel
+
   static const MethodChannel _channel = MethodChannel('login_data_channel');
 
-  static Future<void> submitLoginData(
+  static Future<bool> submitLoginData(
       String username, String password) async {
     try {
-      await _channel.invokeMethod(
+     bool isTrue = await _channel.invokeMethod(
           'submitLoginData', {"username": username, "password": password});
+     return isTrue;
+    } on PlatformException catch (e) {
+      print("Failed to submit form data: '${e.message}'.");
+      return false;
+    }
+  }
+
+
+  /*static Future<void> submitLoginActiveData(
+      bool active, String username) async {
+    try {
+      await _channel.invokeMethod(
+          'submitLoginActiveData', {"active": active, "username":username});
     } on PlatformException catch (e) {
       print("Failed to submit form data: '${e.message}'.");
     }
-  }
+  }*/
 }

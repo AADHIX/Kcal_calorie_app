@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
-
 import '../constants/colors.dart';
 
 class MealSelectionRow extends StatefulWidget {
-  final Map mObj;
+  final Map<String, String> mObj;
   final int index;
+  final Function onItemTapped; // Add the callback function
 
-  const MealSelectionRow(
-      {super.key,
-        required this.mObj,
-        required this.index});
+  const MealSelectionRow({
+    super.key,
+    required this.mObj,
+    required this.index,
+    required this.onItemTapped, // Required callback parameter
+  });
 
   @override
   State<MealSelectionRow> createState() => _MealSelectionRowState();
 }
 
 class _MealSelectionRowState extends State<MealSelectionRow> {
-  bool isChecked = false;
-
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
         child: Row(
           children: [
@@ -53,14 +54,22 @@ class _MealSelectionRowState extends State<MealSelectionRow> {
                   Text(
                     widget.mObj["name"].toString(),
                     style: TextStyle(
-                        color: TColor.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700),
+                      color: TColor.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ],
               ),
             ),
+            IconButton(
+                onPressed: () {
+                  widget.onItemTapped(widget.mObj);
+                },
+                icon: const Icon(Icons.add_circle_outline)),
           ],
-        ));
+        ),
+      ),
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:calory/src/constants/image_strings.dart';
+import 'package:calory/src/features/authentication/screens/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -13,6 +14,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   bool isButtonPressed = false;
 
   void handleGetStarted() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+          const LoginScreen()),
+    );
     // Add your functionality here
   }
 
@@ -89,7 +96,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.03),
-                  Center(child: Image.asset('assets/gif/Animation - 1709021773519.gif')),
                   GestureDetector(
                     onTapDown: (_) {
                       setState(() {

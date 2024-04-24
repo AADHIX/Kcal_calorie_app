@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:calory/src/features/authentication/screens/welcome_screen/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -16,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     Timer(const Duration(seconds: 5), () =>
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (BuildContext context) => const LoginScreen())));
+            MaterialPageRoute(builder: (BuildContext context) => const WelcomeScreen())));
     return Scaffold(
       backgroundColor: Colors.blue,
       body: Column(

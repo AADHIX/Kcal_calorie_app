@@ -1,5 +1,6 @@
 import 'package:calendar_agenda/calendar_agenda.dart';
 import 'package:calory/src/constants/image_strings.dart';
+import 'package:calory/src/features/authentication/screens/add_nutrients_screen/add_nutrients.dart';
 import 'package:calory/src/features/authentication/screens/meal_planner/food_selection_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/widgets.dart';
 import '../../../../common_widgets/meal_food_schedule_row.dart';
 import '../../../../common_widgets/nutritions_row.dart';
 import '../../../../constants/colors.dart';
-import 'package:anim_search_bar/anim_search_bar.dart';
 
 class MealScheduleScreen extends StatefulWidget {
   const MealScheduleScreen({super.key});
@@ -121,7 +121,14 @@ class _MealScheduleScreenState extends State<MealScheduleScreen> {
         ),
         actions: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                    const AddNutrients()),
+              );
+            },
             child: Container(
               margin: const EdgeInsets.all(8),
               height: 40,
