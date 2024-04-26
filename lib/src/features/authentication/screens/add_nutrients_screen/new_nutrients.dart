@@ -127,7 +127,7 @@ class _NutrientPageState extends State<NutrientPage> {
                       fit: BoxFit.contain,
                       color: TColor.gray,
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: 15),
                     Column(
                       children: [
                         Text(
@@ -182,7 +182,7 @@ class _NutrientPageState extends State<NutrientPage> {
                       fit: BoxFit.contain,
                       color: TColor.gray,
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: 27),
                     Column(
                       children: [
                         Text(
@@ -190,7 +190,7 @@ class _NutrientPageState extends State<NutrientPage> {
                           style: TextStyle(
                               fontSize: 20.0, fontWeight: FontWeight.bold),
                         ),
-                        Text('$carbsCount'),
+                        Text('$carbsCount',),
                       ],
                     ),
                   ],
@@ -228,32 +228,27 @@ class _NutrientPageState extends State<NutrientPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Add Carbs',
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                ),
                 Row(
                   children: [
-                    IconButton(
-                      icon: Icon(Icons.remove),
-                      onPressed: decrementCarbs,
+                    Image(
+                      image: AssetImage(fatIcon),
+                      width: 25,
+                      height: 30,
+                      fit: BoxFit.contain,
+                      color: TColor.gray,
                     ),
-                    Text('$carbsCount'),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: incrementCarbs,
+                    SizedBox(width: 15),
+                    Column(
+                      children: [
+                        Text(
+                          'Fat',
+                          style: TextStyle(
+                              fontSize: 20.0, fontWeight: FontWeight.bold),
+                        ),
+                        Text('$fatCount'),
+                      ],
                     ),
                   ],
-                ),
-              ],
-            ),
-            SizedBox(height: 20.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Add Fat',
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                 ),
                 Row(
                   children: [
@@ -261,7 +256,21 @@ class _NutrientPageState extends State<NutrientPage> {
                       icon: Icon(Icons.remove),
                       onPressed: decrementFat,
                     ),
-                    Text('$fatCount'),
+                    Material(
+                      elevation: 4,
+                      // Adjust elevation value as needed
+                      shadowColor: Colors.grey,
+                      // Optional: Adjust shadow color
+                      borderRadius: BorderRadius.circular(10),
+                      // Optional: Adjust border radius
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        padding: EdgeInsets.all(8),
+                        // Optional: Adjust padding as needed
+                        child: Center(child: Text('$fatCount')),
+                      ),
+                    ),
                     IconButton(
                       icon: Icon(Icons.add),
                       onPressed: incrementFat,
