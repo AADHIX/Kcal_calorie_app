@@ -1,8 +1,10 @@
 import 'package:bounce/bounce.dart';
+import 'package:calory/src/common_widgets/calorie_diet_view.dart';
 import 'package:calory/src/features/authentication/screens/meal_planner/meal_schedule_screen.dart';
+import 'package:calory/src/features/authentication/screens/meals_list_view/meals_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:calory/src/common/channels/dart_to_java_channels/home_channel.dart';
-import '../../../../common_widgets/wave_view.dart';
+import 'package:flutter/widgets.dart';
 import '../../../../constants/colors.dart';
 import '../water_screen/water_view.dart';
 
@@ -13,15 +15,33 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   String? username;
-  double consumedCalories = 1500.0;
+  double consumedCalories = 1000.0;
   double dailyCalorieGoal = 2000.0;
+
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
     fetchUsername();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+    _animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_controller);
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Future<void> fetchUsername() async {
@@ -33,8 +53,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    double percentage = consumedCalories / dailyCalorieGoal;
-    double remainingCalories = dailyCalorieGoal - consumedCalories;
+    //double percentage = consumedCalories / dailyCalorieGoal;
+    //double remainingCalories = dailyCalorieGoal - consumedCalories;
 
     var media = MediaQuery.of(context).size;
 
@@ -80,7 +100,7 @@ class _HomeViewState extends State<HomeView> {
                 SizedBox(
                   height: media.width * 0.05,
                 ),
-                Center(
+                /*Center(
                   child: Bounce(
                     onTap: () {
                       Navigator.push(
@@ -124,292 +144,235 @@ class _HomeViewState extends State<HomeView> {
                             ],
                           ),
                           SizedBox(height: 20.0),
-                          TweenAnimationBuilder<double>(
-                            tween: Tween<double>(begin: 0.0, end: percentage),
-                            duration: Duration(seconds: 1),
-                            // Adjust the duration as needed
-                            builder: (BuildContext context, double value,
-                                Widget? child) {
-                              return Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: LinearProgressIndicator(
-                                      value: value, // Value between 0.0 and 1.0
-                                      backgroundColor: Colors.grey,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.black),
-                                    ),
-                                  ),
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(60.0),
-                                    child: Container(
-                                      height: 6.0,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.9 *
-                                          value,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
+                          SimpleAnimationProgressBar(
+                            height: 10,
+                            width: media.width - 30,
+                            backgroundColor: Colors.grey.shade100,
+                            foregrondColor: Colors.purple,
+                            ratio: percentage,
+                            direction: Axis.horizontal,
+                            curve: Curves.fastLinearToSlowEaseIn,
+                            duration: const Duration(seconds: 3),
+                            borderRadius: BorderRadius.circular(7.5),
+                            gradientColor: LinearGradient(
+                                colors: TColor.primaryG,
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight),
                           ),
                         ],
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: media.width * 0.07,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 24, right: 24, top: 16, bottom: 18),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(8.0),
-                          bottomLeft: Radius.circular(8.0),
-                          bottomRight: Radius.circular(8.0),
-                          topRight: Radius.circular(68.0)),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            offset: const Offset(1.1, 1.1),
-                            blurRadius: 10.0),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 16, left: 16, right: 16, bottom: 16),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: Column(
+                ),*/
+                AnimatedBuilder(
+                  animation: _controller,
+                  builder: (BuildContext context, Widget? child) {
+                    return FadeTransition(
+                      opacity: _animation,
+                      child: Transform(
+                        transform: new Matrix4.translationValues(
+                            0.0, 30 * (1.0 - _animation!.value), 0.0),
+                        child: Container(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 24, right: 24),
+                            child: Row(
                               children: <Widget>[
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                Expanded(
+                                  child: Text('Daily Kcal Analyser',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18,
+                                          letterSpacing: 0.5,
+                                          color: Color(0xFF17262A))),
+                                ),
+                                InkWell(
+                                  highlightColor: Colors.transparent,
+                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                          const MealScheduleScreen()),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Row(
                                       children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 4, bottom: 3),
-                                          child: Text(
-                                            '2100',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 32,
-                                              color: Color(0xFF2633C5),
-                                            ),
+                                        Text(
+                                          'Customize',
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 16,
+                                            letterSpacing: 0.5,
+                                            color: Color(0xFF2633C5),
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8, bottom: 8),
-                                          child: Text(
-                                            'ml',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 18,
-                                              letterSpacing: -0.2,
-                                              color: Color(0xFF2633C5),
-                                            ),
+                                        SizedBox(
+                                          height: 38,
+                                          width: 26,
+                                          child: Icon(
+                                            Icons.arrow_forward,
+                                            color: Color(0xFF253840),
+                                            size: 18,
                                           ),
                                         ),
                                       ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 4, top: 2, bottom: 14),
-                                      child: Text(
-                                        'of daily goal 3.5L',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14,
-                                          letterSpacing: 0.0,
-                                          color: Color(0xFF17262A),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 4, right: 4, top: 8, bottom: 16),
-                                  child: Container(
-                                    height: 2,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFFF2F3F8),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(4.0)),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 16),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: <Widget>[
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 4),
-                                            child: Icon(
-                                              Icons.access_time,
-                                              color: Colors.grey
-                                                  .withOpacity(0.5),
-                                              size: 16,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets.only(left: 4.0),
-                                            child: Text(
-                                              'Last drink 8:26 AM',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 14,
-                                                letterSpacing: 0.0,
-                                                color: Colors.grey
-                                                    .withOpacity(0.5),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 4),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            SizedBox(
-                                              width: 24,
-                                              height: 24,
-                                              child: Image.asset(
-                                                  'assets/images/bell.png'),
-                                            ),
-                                            Flexible(
-                                              child: Text(
-                                                'Your bottle is empty, refill it!.',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 12,
-                                                  letterSpacing: 0.0,
-                                                  color: Colors.red,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
                                   ),
                                 )
                               ],
                             ),
                           ),
-                          SizedBox(
-                            width: 34,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                Bounce(
+                  child: CalorieDietView(
+                    animationController: _controller,
+                    animation: _animation,
+                  ),
+                ),
+                AnimatedBuilder(
+                  animation: _controller,
+                  builder: (BuildContext context, Widget? child) {
+                    return FadeTransition(
+                      opacity: _animation,
+                      child: Transform(
+                        transform: new Matrix4.translationValues(
+                            0.0, 30 * (1.0 - _animation!.value), 0.0),
+                        child: Container(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 24, right: 24),
+                            child: Row(
                               children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFFAFAFA),
-                                    shape: BoxShape.circle,
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                          color: Color(0xFF2633C5)
-                                              .withOpacity(0.4),
-                                          offset: const Offset(4.0, 4.0),
-                                          blurRadius: 8.0),
-                                    ],
-                                  ),
+                                Expanded(
+                                  child: Text('Water',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18,
+                                          letterSpacing: 0.5,
+                                          color: Color(0xFF17262A))),
+                                ),
+                                InkWell(
+                                  highlightColor: Colors.transparent,
+                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                  onTap: () {},
                                   child: Padding(
-                                    padding: const EdgeInsets.all(6.0),
-                                    child: Icon(
-                                      Icons.add,
-                                      color: Color(0xFF2633C5),
-                                      size: 24,
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text(
+                                          'Aqua SmartBottle',
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 16,
+                                            letterSpacing: 0.5,
+                                            color: Color(0xFF2633C5),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 38,
+                                          width: 26,
+                                          child: Icon(
+                                            Icons.arrow_forward,
+                                            color: Color(0xFF253840),
+                                            size: 18,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 28,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFFAFAFA),
-                                    shape: BoxShape.circle,
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                          color: Color(0xFF2633C5)
-                                              .withOpacity(0.4),
-                                          offset: const Offset(4.0, 4.0),
-                                          blurRadius: 8.0),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(6.0),
-                                    child: Icon(
-                                      Icons.remove,
-                                      color: Color(0xFF2633C5),
-                                      size: 24,
-                                    ),
-                                  ),
-                                ),
+                                )
                               ],
                             ),
                           ),
-                          Padding(
-                            padding:
-                            const EdgeInsets.only(left: 16, right: 8, top: 16),
-                            child: Container(
-                              width: 60,
-                              height: 160,
-                              decoration: BoxDecoration(
-                                color: Color(0xFFE8EDFE),
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(80.0),
-                                    bottomLeft: Radius.circular(80.0),
-                                    bottomRight: Radius.circular(80.0),
-                                    topRight: Radius.circular(80.0)),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: Colors.grey.withOpacity(0.4),
-                                      offset: const Offset(2, 2),
-                                      blurRadius: 4),
-                                ],
-                              ),
-                              child: WaveViewWater(
-                                percentageValue: 60.0,
-                              ),
-                            ),
-                          )
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
+                Bounce(
+                    child: WaterView(
+                  mainScreenAnimationController: _controller,
+                  mainScreenAnimation: _animation,
+                )),
+                AnimatedBuilder(
+                  animation: _controller,
+                  builder: (BuildContext context, Widget? child) {
+                    return FadeTransition(
+                      opacity: _animation,
+                      child: Transform(
+                        transform: new Matrix4.translationValues(
+                            0.0, 30 * (1.0 - _animation!.value), 0.0),
+                        child: Container(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 24, right: 24),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Text('Meals Today',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18,
+                                          letterSpacing: 0.5,
+                                          color: Color(0xFF17262A))),
+                                ),
+                                InkWell(
+                                  highlightColor: Colors.transparent,
+                                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                          const MealScheduleScreen()),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text(
+                                          'Customize',
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 16,
+                                            letterSpacing: 0.5,
+                                            color: Color(0xFF2633C5),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 38,
+                                          width: 26,
+                                          child: Icon(
+                                            Icons.arrow_forward,
+                                            color: Color(0xFF253840),
+                                            size: 18,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                MealsListView(),
               ],
             ),
           ),

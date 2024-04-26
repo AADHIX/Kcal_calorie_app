@@ -30,7 +30,9 @@ const String profileTab = "assets/images/profile_tab.png";
 const String profileSelect = "assets/images/profile_tab_select.png";
 
 //nutrients add
-const String proteinIcon = "assets/icons/chicken-leg.png";
-const String carbsIcon = "assets/icons/carbohydrates.png";
+const String proteinIcon = "assets/icons/beans.png";
+const String carbsIcon = "assets/icons/silhouette.png";
 const String fatIcon = "assets/icons/fat-food.png";
+
+
 

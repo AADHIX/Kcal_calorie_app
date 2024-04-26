@@ -34,3 +34,15 @@ class AppTheme {
   static const Color backgroundDark = Color(0xFF25254B);
   static const Color background2 = Color(0xFF17203A);
 }
+
+class HexColor extends Color {
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll('#', '');
+    if (hexColor.length == 6) {
+      hexColor = 'FF' + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
+}

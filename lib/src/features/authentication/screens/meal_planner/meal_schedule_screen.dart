@@ -1,3 +1,4 @@
+import 'package:bounce/bounce.dart';
 import 'package:calendar_agenda/calendar_agenda.dart';
 import 'package:calory/src/constants/image_strings.dart';
 import 'package:calory/src/features/authentication/screens/add_nutrients_screen/add_nutrients.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../../../common_widgets/calorie_diet_view.dart';
 import '../../../../common_widgets/meal_food_schedule_row.dart';
 import '../../../../common_widgets/nutritions_row.dart';
 import '../../../../constants/colors.dart';
@@ -17,7 +19,10 @@ class MealScheduleScreen extends StatefulWidget {
   State<MealScheduleScreen> createState() => _MealScheduleScreenState();
 }
 
-class _MealScheduleScreenState extends State<MealScheduleScreen> {
+class _MealScheduleScreenState extends State<MealScheduleScreen> with TickerProviderStateMixin{
+
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   bool isDropdownBrVisible = false; // To manage the visibility of the dropdown list
   bool isDropdownLnVisible = false; // To manage the visibility of the dropdown list
@@ -84,6 +89,21 @@ class _MealScheduleScreenState extends State<MealScheduleScreen> {
   void initState() {
     super.initState();
     _selectedDateAppBBar = DateTime.now();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+    _animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_controller);
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -200,6 +220,12 @@ class _MealScheduleScreenState extends State<MealScheduleScreen> {
                     end: Alignment.bottomCenter),
                 borderRadius: BorderRadius.circular(10.0),
               ),
+            ),
+          ),
+          Bounce(
+            child: CalorieDietView(
+              animationController: _controller,
+              animation: _animation,
             ),
           ),
           Expanded(

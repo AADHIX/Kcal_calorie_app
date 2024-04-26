@@ -1,4 +1,5 @@
 import 'package:calory/src/features/authentication/screens/add_nutrients_screen/add_nutrients.dart';
+import 'package:calory/src/features/authentication/screens/add_nutrients_screen/new_nutrients.dart';
 import 'package:calory/src/features/authentication/screens/get_profile_screen/get_gender_screen.dart';
 import 'package:calory/src/features/authentication/screens/get_profile_screen/get_profile_screen.dart';
 import 'package:calory/src/features/authentication/screens/home_screen/home_view.dart';
@@ -16,10 +17,10 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
-      home: HomeView(),
+      home: NutrientPage(),
     );
   }
 }

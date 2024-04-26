@@ -1,11 +1,13 @@
+import 'package:bounce/bounce.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../../../../common_widgets/wave_view.dart';
 
 class WaterView extends StatefulWidget {
   const WaterView(
-      {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation})
-      : super(key: key);
+      {super.key,
+      this.mainScreenAnimationController,
+      this.mainScreenAnimation});
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
@@ -15,6 +17,10 @@ class WaterView extends StatefulWidget {
 }
 
 class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
+  double waterPercentage = 0.0;
+  double waterMLiter = 0.0;
+  String formattedTime = '--';
+
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
@@ -68,18 +74,18 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                       padding: const EdgeInsets.only(
                                           left: 4, bottom: 3),
                                       child: Text(
-                                        '2100',
+                                        '$waterMLiter',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 32,
                                           color: Color(0xFF2633C5),
                                         ),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8, bottom: 8),
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 8, bottom: 8),
                                       child: Text(
                                         'ml',
                                         textAlign: TextAlign.center,
@@ -93,11 +99,11 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                     ),
                                   ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
+                                const Padding(
+                                  padding: EdgeInsets.only(
                                       left: 4, top: 2, bottom: 14),
                                   child: Text(
-                                    'of daily goal 3.5L',
+                                    'of daily goal 4.0L',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
@@ -114,10 +120,10 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                   left: 4, right: 4, top: 8, bottom: 16),
                               child: Container(
                                 height: 2,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: Color(0xFFF2F3F8),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(4.0)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4.0)),
                                 ),
                               ),
                             ),
@@ -136,8 +142,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                         padding: const EdgeInsets.only(left: 4),
                                         child: Icon(
                                           Icons.access_time,
-                                          color: Colors.grey
-                                              .withOpacity(0.5),
+                                          color: Colors.grey.withOpacity(0.5),
                                           size: 16,
                                         ),
                                       ),
@@ -145,14 +150,13 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                         padding:
                                             const EdgeInsets.only(left: 4.0),
                                         child: Text(
-                                          'Last drink 8:26 AM',
+                                          'Last drink $formattedTime',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 14,
                                             letterSpacing: 0.0,
-                                            color: Colors.grey
-                                                .withOpacity(0.5),
+                                            color: Colors.grey.withOpacity(0.5),
                                           ),
                                         ),
                                       ),
@@ -180,7 +184,9 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                               fontWeight: FontWeight.w500,
                                               fontSize: 12,
                                               letterSpacing: 0.0,
-                                              color: Colors.red,
+                                              color: waterPercentage == 0.0
+                                                  ? Colors.red
+                                                  : Colors.grey,
                                             ),
                                           ),
                                         ),
@@ -199,48 +205,84 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Color(0xFFFAFAFA),
-                                shape: BoxShape.circle,
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: Color(0xFF2633C5)
-                                          .withOpacity(0.4),
-                                      offset: const Offset(4.0, 4.0),
-                                      blurRadius: 8.0),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Icon(
-                                  Icons.add,
-                                  color: Color(0xFF2633C5),
-                                  size: 24,
+                            Bounce(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFAFAFA),
+                                  shape: BoxShape.circle,
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: const Color(0xFF2633C5)
+                                            .withOpacity(0.4),
+                                        offset: const Offset(4.0, 4.0),
+                                        blurRadius: 8.0),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        DateTime currentTime = DateTime.now();
+                                        formattedTime = DateFormat('h:mm a')
+                                            .format(
+                                                currentTime); //for showing time
+                                        waterPercentage += 0.25 *
+                                            25; // Increment by 0.25 liters
+                                        waterMLiter +=
+                                            250; // for showing consumed water in ml
+                                        if (waterPercentage > 100.0) {
+                                          waterPercentage =
+                                              100.0; // Cap at 100%
+                                          waterMLiter = 4000;
+                                        }
+                                      });
+                                    },
+                                    child: const Icon(
+                                      Icons.add,
+                                      color: Color(0xFF2633C5),
+                                      size: 24,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                             const SizedBox(
                               height: 28,
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Color(0xFFFAFAFA),
-                                shape: BoxShape.circle,
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: Color(0xFF2633C5)
-                                          .withOpacity(0.4),
-                                      offset: const Offset(4.0, 4.0),
-                                      blurRadius: 8.0),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Icon(
-                                  Icons.remove,
-                                  color: Color(0xFF2633C5),
-                                  size: 24,
+                            Bounce(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFAFAFA),
+                                  shape: BoxShape.circle,
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: const Color(0xFF2633C5)
+                                            .withOpacity(0.4),
+                                        offset: const Offset(4.0, 4.0),
+                                        blurRadius: 8.0),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        waterPercentage -=
+                                            0.25 * 25; // dec by 0.25 liters
+                                        waterMLiter -= 250;
+                                        if (waterPercentage < 0.0) {
+                                          waterPercentage = 0.0; // Cap at 0%
+                                          waterMLiter = 0;
+                                        }
+                                      });
+                                    },
+                                    child: const Icon(
+                                      Icons.remove,
+                                      color: Color(0xFF2633C5),
+                                      size: 24,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -254,7 +296,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                           width: 60,
                           height: 160,
                           decoration: BoxDecoration(
-                            color: Color(0xFFE8EDFE),
+                            color: const Color(0xFFE8EDFE),
                             borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(80.0),
                                 bottomLeft: Radius.circular(80.0),
@@ -268,7 +310,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                             ],
                           ),
                           child: WaveViewWater(
-                            percentageValue: 60.0,
+                            percentageValue: waterPercentage,
                           ),
                         ),
                       )

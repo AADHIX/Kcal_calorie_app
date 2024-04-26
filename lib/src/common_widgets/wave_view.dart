@@ -5,7 +5,7 @@ import 'package:vector_math/vector_math.dart' as vector;
 class WaveViewWater extends StatefulWidget {
   final double percentageValue;
 
-  const WaveViewWater({Key? key, this.percentageValue = 100.0}) : super(key: key);
+  const WaveViewWater({super.key, this.percentageValue = 100.0});
   @override
   _WaveViewWaterState createState() => _WaveViewWaterState();
 }
@@ -13,17 +13,17 @@ class WaveViewWater extends StatefulWidget {
 class _WaveViewWaterState extends State<WaveViewWater> with TickerProviderStateMixin {
   AnimationController? animationController;
   AnimationController? waveAnimationController;
-  Offset bottleOffset1 = Offset(0, 0);
+  Offset bottleOffset1 = const Offset(0, 0);
   List<Offset> animList1 = [];
-  Offset bottleOffset2 = Offset(60, 0);
+  Offset bottleOffset2 = const Offset(60, 0);
   List<Offset> animList2 = [];
 
   @override
   void initState() {
     animationController = AnimationController(
-        duration: Duration(milliseconds: 2000), vsync: this);
+        duration: const Duration(milliseconds: 2000), vsync: this);
     waveAnimationController = AnimationController(
-        duration: Duration(milliseconds: 2000), vsync: this);
+        duration: const Duration(milliseconds: 2000), vsync: this);
     animationController!
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
@@ -74,9 +74,6 @@ class _WaveViewWaterState extends State<WaveViewWater> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    if (widget == null) {
-      return SizedBox(); // or any other fallback widget
-    }
     return Container(
       alignment: Alignment.center,
       child: new AnimatedBuilder(
