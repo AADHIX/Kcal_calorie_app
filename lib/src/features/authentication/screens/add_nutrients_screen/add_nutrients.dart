@@ -25,6 +25,14 @@ class _AddNutrientsState extends State<AddNutrients> {
 
   late CameraController _cameraController;
 
+  final _formKey = GlobalKey<FormState>();
+
+  TextEditingController _foodWeightController = TextEditingController();
+  TextEditingController _foodNameController = TextEditingController();
+  TextEditingController _foodProteinController = TextEditingController();
+  TextEditingController _foodCarbsController = TextEditingController();
+  TextEditingController _foodFatController = TextEditingController();
+
   Uint8List? _imagefile;
 
   Future<void> _getImage() async {
@@ -46,6 +54,23 @@ class _AddNutrientsState extends State<AddNutrients> {
         print('No image selected.');
       }
     });
+  }
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      weightS = double.parse(_foodWeightController.text);
+      nameS = _foodNameController.text;
+      proteinS = double.parse(_foodProteinController.text);
+      carbsS = double.parse(_foodCarbsController.text);
+      fatS = double.parse(_foodFatController.text);
+      print(weightS);
+      print(nameS);
+      print(proteinS);
+      print(carbsS);
+      print(fatS);
+      print(_imagefile);
+      NutrientsDataChannel.submitNutrientsData(proteinS, fatS, carbsS, weightS, nameS, _imagefile);
+    }
   }
 
   @override
@@ -104,138 +129,117 @@ class _AddNutrientsState extends State<AddNutrients> {
       backgroundColor: TColor.white,
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: NutrientsCell(
-                    icon: proteinIcon,
-                    title: "Protein",
-                    onChanged: (value) {
-                      setState(() {
-                        proteinS = double.parse(value);
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Expanded(
-                  child: NutrientsCell(
-                    icon: carbsIcon,
-                    title: "Carbs",
-                    onChanged: (value) {
-                      setState(() {
-                        carbsS = double.parse(value);
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Expanded(
-                  child: NutrientsCell(
-                    icon: fatIcon,
-                    title: "Fat",
-                    onChanged: (value) {
-                      setState(() {
-                        fatS = double.parse(value);
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: NutrientsCell(
-                    icon: proteinIcon,
-                    title: "Weight",
-                    onChanged: (value) {
-                      setState(() {
-                        weightS = double.parse(value);
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Expanded(
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: TColor.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: const [
-                        BoxShadow(color: Colors.black12, blurRadius: 2)
-                      ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(
+                height: 15,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: NutrientsCell(
+                      textController: _foodProteinController,
+                      icon: proteinIcon,
+                      title: "Protein",
                     ),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Text(
-                            'Name',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          TextFormField(
-                            onChanged: (value) {
-                              setState(() {
-                                nameS = value;
-                              });
-                            },
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.text,
-                            style: TextStyle(
-                              color: TColor.gray,
-                              fontSize: 12,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: "food name",
-                              hintStyle: TextStyle(color: TColor.gray),
-                              border: InputBorder.none,
-                            ),
-                          ),
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Expanded(
+                    child: NutrientsCell(
+                      textController: _foodCarbsController,
+                      icon: carbsIcon,
+                      title: "Carbs",
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Expanded(
+                    child: NutrientsCell(
+                      textController: _foodFatController,
+                      icon: fatIcon,
+                      title: "Fat",
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: NutrientsCell(
+                      textController: _foodWeightController,
+                      icon: proteinIcon,
+                      title: "Weight",
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: TColor.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: const [
+                          BoxShadow(color: Colors.black12, blurRadius: 2)
                         ],
+                      ),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              'Name',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: _foodNameController,
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.text,
+                              style: TextStyle(
+                                color: TColor.gray,
+                                fontSize: 12,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "food name",
+                                hintStyle: TextStyle(color: TColor.gray),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            Center(
-              child: RoundButton(
-                  onPressed: () {
-                    print(proteinS);
-                    print(carbsS);
-                    print(fatS);
-                    print(weightS);
-                    print(nameS);
-                  },
-                  title: 'Click'),
-            ),
-          ],
+                ],
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              Center(
+                child: RoundButton(
+                    onPressed: () {
+                      _submitForm();
+                    },
+                    title: 'Click'),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: InkWell(
@@ -262,17 +266,18 @@ class _AddNutrientsState extends State<AddNutrients> {
   }
 }
 
-/*class NutrientsDataChannel {
+class NutrientsDataChannel {
   // nutrients channel
   static const MethodChannel _channel = MethodChannel('nutrients_data_channel');
 
   static Future<void> submitNutrientsData(
-      double protein, double fat, double carbs) async {
+      double protein, double fat, double carbs, double weight, String name, Uint8List? img) async {
     try {
       await _channel.invokeMethod(
-          'submitNutrientsData', {"protein": protein, "fat": fat, "carbs": carbs});
+          'submitNutrientsData', {"protein": protein, "fat": fat, "carbs": carbs, "weight": weight, "name": name, "image": img});
     } on PlatformException catch (e) {
       print("Failed to submit form data: '${e.message}'.");
     }
   }
-}*/
+}
+

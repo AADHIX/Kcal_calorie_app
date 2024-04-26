@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import '../constants/colors.dart';
 
 class NutrientsCell extends StatelessWidget {
   final String title;
   final ValueChanged<String>? onChanged;
   final String icon;
+  final TextEditingController textController;
 
   const NutrientsCell({
     Key? key,
     required this.title,
-    required this.onChanged,
+    this.onChanged,
     required this.icon,
+    required this.textController,
   }) : super(key: key);
 
   @override
@@ -53,6 +54,7 @@ class NutrientsCell extends StatelessWidget {
             children: [
               Expanded(
                 child: TextFormField(
+                  controller: textController,
                   textAlign: TextAlign.center,
                   onChanged: onChanged,
                   keyboardType: TextInputType.number,

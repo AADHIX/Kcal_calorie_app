@@ -1,5 +1,11 @@
+import 'dart:typed_data';
+
+import 'package:calory/src/common_widgets/highlighted_rtextfield.dart';
 import 'package:calory/src/constants/image_strings.dart';
+import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../constants/colors.dart';
 
@@ -12,6 +18,34 @@ class _NutrientPageState extends State<NutrientPage> {
   int proteinCount = 0;
   int carbsCount = 0;
   int fatCount = 0;
+  int weightCount = 0;
+
+  TextEditingController nameController = TextEditingController();
+
+  late CameraController _cameraController;
+
+  Uint8List? _imagefile;
+
+  Future<void> _getImage() async {
+    List<CameraDescription> cameras;
+    cameras = await availableCameras();
+    _cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+    await _cameraController.initialize();
+    if (mounted) {
+      setState(() {});
+    }
+    //final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    setState(() async {
+      if (pickedFile != null) {
+        final bytes = await pickedFile.readAsBytes();
+        _imagefile = bytes;
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
 
   void incrementProtein() {
     setState(() {
@@ -23,6 +57,20 @@ class _NutrientPageState extends State<NutrientPage> {
     if (proteinCount > 0) {
       setState(() {
         proteinCount--;
+      });
+    }
+  }
+
+  void incrementWeight() {
+    setState(() {
+      weightCount++;
+    });
+  }
+
+  void decrementWeight() {
+    if (weightCount > 0) {
+      setState(() {
+        weightCount--;
       });
     }
   }
@@ -109,12 +157,13 @@ class _NutrientPageState extends State<NutrientPage> {
         ],
       ),
       backgroundColor: TColor.white,
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 16.0),
+      body: Container(
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
         // Adjusted padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            SizedBox(height: 30.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -169,7 +218,7 @@ class _NutrientPageState extends State<NutrientPage> {
                 ),
               ],
             ),
-            SizedBox(height: 20.0),
+            SizedBox(height: 50.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -190,7 +239,9 @@ class _NutrientPageState extends State<NutrientPage> {
                           style: TextStyle(
                               fontSize: 20.0, fontWeight: FontWeight.bold),
                         ),
-                        Text('$carbsCount',),
+                        Text(
+                          '$carbsCount',
+                        ),
                       ],
                     ),
                   ],
@@ -224,7 +275,7 @@ class _NutrientPageState extends State<NutrientPage> {
                 ),
               ],
             ),
-            SizedBox(height: 20.0),
+            SizedBox(height: 50.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -237,7 +288,7 @@ class _NutrientPageState extends State<NutrientPage> {
                       fit: BoxFit.contain,
                       color: TColor.gray,
                     ),
-                    SizedBox(width: 15),
+                    SizedBox(width: 39),
                     Column(
                       children: [
                         Text(
@@ -279,24 +330,120 @@ class _NutrientPageState extends State<NutrientPage> {
                 ),
               ],
             ),
-            SizedBox(height: 20.0),
+            SizedBox(height: 50.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Add Food',
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                Row(
+                  children: [
+                    Image(
+                      image: AssetImage(weightNIcon),
+                      width: 25,
+                      height: 30,
+                      fit: BoxFit.contain,
+                      color: TColor.gray,
+                    ),
+                    SizedBox(width: 21),
+                    Column(
+                      children: [
+                        Text(
+                          'Weight',
+                          style: TextStyle(
+                              fontSize: 20.0, fontWeight: FontWeight.bold),
+                        ),
+                        Text('$weightCount'),
+                      ],
+                    ),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Add food functionality
-                    // You can use proteinCount, carbsCount, fatCount here
-                  },
-                  child: Text('Add Food'),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove),
+                      onPressed: decrementWeight,
+                    ),
+                    Material(
+                      elevation: 4,
+                      // Adjust elevation value as needed
+                      shadowColor: Colors.grey,
+                      // Optional: Adjust shadow color
+                      borderRadius: BorderRadius.circular(10),
+                      // Optional: Adjust border radius
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        padding: EdgeInsets.all(8),
+                        // Optional: Adjust padding as needed
+                        child: Center(child: Text('$weightCount')),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: incrementWeight,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 50.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Image(
+                      image: AssetImage(foodNameIcon),
+                      width: 25,
+                      height: 30,
+                      fit: BoxFit.contain,
+                      color: TColor.gray,
+                    ),
+                    SizedBox(width: 27),
+                    Text(
+                      'Name',
+                      style: TextStyle(
+                          fontSize: 20.0, fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
               ],
             ),
           ],
+        ),
+      ),
+      floatingActionButton: InkWell(
+        onTap: _getImage,
+        child: Container(
+          width: 110,
+          height: 60,
+          decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(27.5),
+              boxShadow: const [
+                BoxShadow(
+                    color: Colors.white, blurRadius: 5, offset: Offset(0, 2))
+              ]),
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(width: 10),
+              Image(
+                image: AssetImage('assets/icons/camera-float.png'),
+                width: 25,
+                height: 30,
+                fit: BoxFit.contain,
+              ),
+              SizedBox(width: 10),
+              Text(
+                'Snap',
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            ],
+          ),
         ),
       ),
     );

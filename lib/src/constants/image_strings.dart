@@ -33,6 +33,8 @@ const String profileSelect = "assets/images/profile_tab_select.png";
 const String proteinIcon = "assets/icons/beans.png";
 const String carbsIcon = "assets/icons/silhouette.png";
 const String fatIcon = "assets/icons/cheese.png";
+const String weightNIcon = "assets/icons/kitchen-scale.png";
+const String foodNameIcon = "assets/icons/fruits.png";
 
 
 
