@@ -37,4 +37,11 @@ const String weightNIcon = "assets/icons/kitchen-scale.png";
 const String foodNameIcon = "assets/icons/fruits.png";
 
 
+const String sedentary = "assets/images/sedentary.png";
+const String lightlyActive = "assets/images/lightly-active.png";
+const String moderately = "assets/images/moderately.png";
+const String veryActive = "assets/images/very-active.png";
+const String extraActive = "assets/images/extra-active.png";
+
+
 

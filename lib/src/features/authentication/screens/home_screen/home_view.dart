@@ -1,24 +1,32 @@
 import 'package:bounce/bounce.dart';
 import 'package:calory/src/common_widgets/calorie_diet_view.dart';
+import 'package:calory/src/features/authentication/screens/login_screen/login_screen.dart';
 import 'package:calory/src/features/authentication/screens/meal_planner/meal_schedule_screen.dart';
 import 'package:calory/src/features/authentication/screens/meals_list_view/meals_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:calory/src/common/channels/dart_to_java_channels/home_channel.dart';
-import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import '../../../../constants/colors.dart';
 import '../water_screen/water_view.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final String email;
+  const HomeView({super.key , required this.email});
 
   @override
   State<HomeView> createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
-  String? username;
-  double consumedCalories = 1000.0;
-  double dailyCalorieGoal = 2000.0;
+
+  late String username = '';
+  late String email = widget.email;
+  late double targetCal = 0.0;
+  late double waterLv = 0.0;
+  late int waterPr = 0;
+  late String waterTm = '--';
+  late String currentDate;
+
 
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -26,16 +34,17 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    fetchUsername();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
     _animation = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate(_controller);
     _controller.forward();
+    fetchUserData();
+    currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
   }
 
   @override
@@ -44,17 +53,28 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Future<void> fetchUsername() async {
-    String? fetchedUsername = await HomeDataChannel.getCurrentUser();
-    setState(() {
-      username = fetchedUsername;
-    });
+  Future<void> fetchUserData() async {
+    await fetchUser(); // Wait for fetchUser to complete
+  }
+
+  Future<void> fetchUser() async {
+    final Map<dynamic, dynamic>? userData =
+    await HomeDataChannel.getCurrentUser();
+    if(userData != null){
+      final String uName = userData['name'].toString();
+      final String uEmail = userData['email'].toString();
+
+      setState(() {
+        username = uName;
+        email = uEmail;
+      });
+    }else{
+      print('Failed to retrieve user data.');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    //double percentage = consumedCalories / dailyCalorieGoal;
-    //double remainingCalories = dailyCalorieGoal - consumedCalories;
 
     var media = MediaQuery.of(context).size;
 
@@ -87,6 +107,18 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                       ],
                     ),
                     IconButton(
+                      onPressed: () {
+                         HomeDataChannel.disableUser(email);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                              const LoginScreen()),
+                        );
+                      },
+                      icon: Icon(Icons.logout),
+                    ),
+                    /*IconButton(
                       onPressed: () {},
                       icon: Image.asset(
                         "assets/images/notification_active.png",
@@ -94,76 +126,12 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                         height: 25,
                         fit: BoxFit.fitHeight,
                       ),
-                    ),
+                    ),*/
                   ],
                 ),
                 SizedBox(
                   height: media.width * 0.05,
                 ),
-                /*Center(
-                  child: Bounce(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MealScheduleScreen()),
-                      );
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      padding: EdgeInsets.all(20.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Track your food',
-                            style: TextStyle(fontSize: 10.0),
-                          ),
-                          SizedBox(height: 10.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '$remainingCalories kcal remaining',
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                              Icon(Icons.next_plan_rounded),
-                            ],
-                          ),
-                          SizedBox(height: 20.0),
-                          SimpleAnimationProgressBar(
-                            height: 10,
-                            width: media.width - 30,
-                            backgroundColor: Colors.grey.shade100,
-                            foregrondColor: Colors.purple,
-                            ratio: percentage,
-                            direction: Axis.horizontal,
-                            curve: Curves.fastLinearToSlowEaseIn,
-                            duration: const Duration(seconds: 3),
-                            borderRadius: BorderRadius.circular(7.5),
-                            gradientColor: LinearGradient(
-                                colors: TColor.primaryG,
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),*/
                 AnimatedBuilder(
                   animation: _controller,
                   builder: (BuildContext context, Widget? child) {
@@ -194,7 +162,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                          const MealScheduleScreen()),
+                                           MealScheduleScreen(email: email,)),
                                     );
                                   },
                                   child: Padding(
@@ -236,6 +204,8 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                   child: CalorieDietView(
                     animationController: _controller,
                     animation: _animation,
+                    email: email,
+                    date: currentDate
                   ),
                 ),
                 AnimatedBuilder(
@@ -303,6 +273,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                     child: WaterView(
                   mainScreenAnimationController: _controller,
                   mainScreenAnimation: _animation,
+                      email: email,
                 )),
                 AnimatedBuilder(
                   animation: _controller,
@@ -334,7 +305,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                          const MealScheduleScreen()),
+                                           MealScheduleScreen(email: email)),
                                     );
                                   },
                                   child: Padding(

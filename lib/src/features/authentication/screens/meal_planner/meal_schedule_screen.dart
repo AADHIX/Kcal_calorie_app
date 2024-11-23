@@ -1,58 +1,61 @@
+import 'dart:async';
+import 'dart:ffi';
+
 import 'package:bounce/bounce.dart';
 import 'package:calendar_agenda/calendar_agenda.dart';
+import 'package:calory/src/common/channels/dart_to_java_channels/meal_schedule_channel.dart';
+import 'package:calory/src/common_widgets/round_button.dart';
 import 'package:calory/src/constants/image_strings.dart';
+import 'package:calory/src/constants/text_string.dart';
 import 'package:calory/src/features/authentication/screens/add_nutrients_screen/add_nutrients.dart';
 import 'package:calory/src/features/authentication/screens/meal_planner/food_selection_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
+import '../../../../common/models/calories_daily.dart';
 import '../../../../common_widgets/calorie_diet_view.dart';
 import '../../../../common_widgets/meal_food_schedule_row.dart';
 import '../../../../common_widgets/nutritions_row.dart';
 import '../../../../constants/colors.dart';
 
 class MealScheduleScreen extends StatefulWidget {
-  const MealScheduleScreen({super.key});
+  final String email;
+
+  const MealScheduleScreen({super.key, required this.email});
 
   @override
   State<MealScheduleScreen> createState() => _MealScheduleScreenState();
 }
 
-class _MealScheduleScreenState extends State<MealScheduleScreen> with TickerProviderStateMixin{
-
+class _MealScheduleScreenState extends State<MealScheduleScreen>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
-
-  bool isDropdownBrVisible = false; // To manage the visibility of the dropdown list
-  bool isDropdownLnVisible = false; // To manage the visibility of the dropdown list
-  bool isDropdownSnVisible = false; // To manage the visibility of the dropdown list
-  bool isDropdownDnVisible = false; // To manage the visibility of the dropdown list
 
   final CalendarAgendaController _calendarAgendaControllerAppBar =
       CalendarAgendaController();
 
   late DateTime _selectedDateAppBBar;
 
+  late String currentDate;
+
   List<String> selectedFoodItems = []; //marked food items list
 
-  List breakfastArr = [
-    {"name": "Honey Pancake", "time": "07:00am", "image": splashImage},
-    {"name": "Coffee", "time": "07:30am", "image": splashImage},
-  ];
+  //Map<dynamic, dynamic>? fetchedFoodInfo;
 
-  List lunchArr = [
-    {"name": "Chicken Steak", "time": "01:00pm", "image": splashImage},
-    {"name": "Milk", "time": "01:20pm", "image": splashImage},
-  ];
-  List snacksArr = [
-    {"name": "Orange", "time": "04:30pm", "image": splashImage},
-    {"name": "Apple Pie", "time": "04:40pm", "image": splashImage},
-  ];
-  List dinnerArr = [
-    {"name": "Salad", "time": "07:10pm", "image": splashImage},
-    {"name": "Oatmeal", "time": "08:10pm", "image": splashImage},
-  ];
+  late List<dynamic> fetchedFoodInfo;
+
+  List<dynamic> fetchedBreakfast = [];
+  List<dynamic> fetchedLunch = [];
+  List<dynamic> fetchedSnacks = [];
+  List<dynamic> fetchedDinner = [];
+
+  List breakfastArr = [];
+  List lunchArr = [];
+  List snacksArr = [];
+  List dinnerArr = [];
 
   List nutritionArr = [
     {
@@ -89,6 +92,7 @@ class _MealScheduleScreenState extends State<MealScheduleScreen> with TickerProv
   void initState() {
     super.initState();
     _selectedDateAppBBar = DateTime.now();
+    currentDate = DateFormat('yyyy-MM-dd').format(_selectedDateAppBBar);
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 1),
@@ -98,6 +102,7 @@ class _MealScheduleScreenState extends State<MealScheduleScreen> with TickerProv
       end: 1.0,
     ).animate(_controller);
     _controller.forward();
+    fetchFoodData();
   }
 
   @override
@@ -106,47 +111,80 @@ class _MealScheduleScreenState extends State<MealScheduleScreen> with TickerProv
     super.dispose();
   }
 
+  Future<void> updateFoodConsumed(String date, String email, bool consumed,
+      double weight, String image, String meal, String foodName) async {
+    await updateConsumed(date, email, consumed, weight, image, meal, foodName);
+  }
+
+  Future<void> updateConsumed(String date, String email, bool consumed,
+      double weight, String image, String meal, String foodName) async {
+    try {
+      await MealScheduleDataChannel.updateConsumed(
+          date, email, consumed, weight, image, meal, foodName);
+    } catch (e) {
+      print('Failed to update consumed: $e');
+    }
+  }
+
+  Future<void> fetchFoodData() async {
+    await fetchFood(); // Wait for fetchUser to complete
+    showUserFood(); // Now call fetchUserInfo
+  }
+
+  void showUserFood() {
+    //print(fetchedFoodInfo);
+    fetchedBreakfast = [];
+    fetchedLunch = [];
+    fetchedSnacks = [];
+    fetchedDinner = [];
+    for (var item in fetchedFoodInfo) {
+      if (item['meal'] == 'BreakFast') {
+        fetchedBreakfast.add(item);
+      } else if (item['meal'] == 'Lunch') {
+        fetchedLunch.add(item);
+      } else if (item['meal'] == 'Snacks') {
+        fetchedSnacks.add(item);
+      } else {
+        fetchedDinner.add(item);
+      }
+    }
+  }
+
+  Future<void> fetchFood() async {
+    try {
+      List<dynamic> caloriesList =
+          await MealScheduleDataChannel.getScheduleFoodInfo(
+              currentDate, widget.email);
+      setState(() {
+        fetchedFoodInfo = caloriesList;
+      });
+      // print(caloriesList);
+    } catch (e) {
+      print('Failed to fetch calories list: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    fetchFoodData();
     var media = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: TColor.white,
         centerTitle: true,
         elevation: 0,
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            margin: const EdgeInsets.all(8),
-            height: 40,
-            width: 40,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: TColor.lightGray,
-                borderRadius: BorderRadius.circular(10)),
-            child: Image.asset(
-              "assets/images/black_btn.png",
-              width: 15,
-              height: 15,
-              fit: BoxFit.contain,
-            ),
-          ),
-        ),
         title: Text(
           "Meal  Schedule",
           style: TextStyle(
               color: TColor.black, fontSize: 16, fontWeight: FontWeight.w700),
         ),
         actions: [
+          Text("Add Nutrients->",style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold),),
           InkWell(
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                    const AddNutrients()),
+                MaterialPageRoute(builder: (context) => const AddNutrients()),
               );
             },
             child: Container(
@@ -201,7 +239,6 @@ class _MealScheduleScreenState extends State<MealScheduleScreen> with TickerProv
             selectedDateColor: Colors.white,
             dateColor: Colors.black,
             locale: 'en',
-
             initialDate: DateTime.now(),
             calendarEventColor: TColor.primaryColor2,
             firstDate: DateTime.now().subtract(const Duration(days: 140)),
@@ -209,6 +246,19 @@ class _MealScheduleScreenState extends State<MealScheduleScreen> with TickerProv
 
             onDateSelected: (date) {
               _selectedDateAppBBar = date;
+              setState(() {
+                currentDate =
+                    DateFormat('yyyy-MM-dd').format(_selectedDateAppBBar);
+                fetchFoodData();
+                Bounce(
+                  child: CalorieDietView(
+                    animationController: _controller,
+                    animation: _animation,
+                    email: widget.email,
+                    date: currentDate,
+                  ),
+                );
+              });
             },
             selectedDayLogo: Container(
               width: double.maxFinite,
@@ -226,6 +276,8 @@ class _MealScheduleScreenState extends State<MealScheduleScreen> with TickerProv
             child: CalorieDietView(
               animationController: _controller,
               animation: _animation,
+              email: widget.email,
+              date: currentDate,
             ),
           ),
           Expanded(
@@ -233,267 +285,399 @@ class _MealScheduleScreenState extends State<MealScheduleScreen> with TickerProv
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  decoration: BoxDecoration(
+                      color: TColor.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black12, blurRadius: 2)
+                      ]),
+                  child: Column(
                     children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            isDropdownBrVisible = !isDropdownBrVisible;
-                          });
-                        },
-                        child: Text(
-                          "BreakFast",
-                          style: TextStyle(
-                              color: TColor.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(() {});
+                              },
+                              child: Text(
+                                "BreakFast",
+                                style: TextStyle(
+                                    color: TColor.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              width: media.width * 0.02,
+                            ),
+                            Text(
+                              "(${fetchedBreakfast.length} Items )",
+                              style:
+                                  TextStyle(color: TColor.gray, fontSize: 12),
+                            ),
+                            Expanded(child: Container()),
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            FoodSelectionScreen(
+                                                meal: 'BreakFast',
+                                                email: widget.email)),
+                                  );
+                                },
+                                icon: const Icon(
+                                    Icons.add_circle_outline_outlined)),
+                          ],
                         ),
                       ),
-                      SizedBox(
-                        width: media.width * 0.02,
-                      ),
-                      Text(
-                          "(${breakfastArr.length} Items | 230 calories)",
-                          style: TextStyle(color: TColor.gray, fontSize: 12),
-                      ),
-                      Expanded(child: Container()),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const FoodSelectionScreen()),
+                      ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: fetchedBreakfast.length,
+                          itemBuilder: (context, index) {
+                            var mObj = fetchedBreakfast[index] as Map? ?? {};
+                            return MealFoodScheduleRow(
+                              mObj: mObj,
+                              index: index,
+                              onCheckboxChanged: (food, isChecked) {
+                                // for handling checkbox changes
+                                setState(() {
+                                  if (isChecked) {
+                                    //selectedFoodItems.add(foodName);
+                                    updateFoodConsumed(
+                                        food["date"].toString(),
+                                        food["emailId"].toString(),
+                                        isChecked,
+                                        double.parse(food["weight"].toString()),
+                                        food["image"].toString(),
+                                        food["meal"].toString(),
+                                        food["foodName"]
+                                            .toString()
+                                            .toLowerCase());
+                                  } else {
+                                    //selectedFoodItems.remove(foodName);
+                                    updateFoodConsumed(
+                                        food["date"].toString(),
+                                        food["emailId"].toString(),
+                                        isChecked,
+                                        double.parse(food["weight"].toString()),
+                                        food["image"].toString(),
+                                        food["meal"].toString(),
+                                        food["foodName"]
+                                            .toString()
+                                            .toLowerCase());
+                                  }
+                                });
+                              },
                             );
-                          },
-                          icon: const Icon(Icons.add_circle_outline_outlined)),
+                          }),
                     ],
                   ),
                 ),
-                Visibility(
-                  visible: isDropdownBrVisible,
-                  child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: breakfastArr.length,
-                      itemBuilder: (context, index) {
-                        var mObj = breakfastArr[index] as Map? ?? {};
-                        return MealFoodScheduleRow(
-                          mObj: mObj,
-                          index: index,
-                          onCheckboxChanged: (foodName, isChecked) {
-                            // for handling checkbox changes
-                            setState(() {
-                              if (isChecked) {
-                                selectedFoodItems.add(foodName);
-                              } else {
-                                selectedFoodItems.remove(foodName);
-                              }
-                            });
-                          },
-                        );
-                      }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  decoration: BoxDecoration(
+                      color: TColor.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black12, blurRadius: 2)
+                      ]),
+                  child: Column(
                     children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            isDropdownLnVisible = !isDropdownLnVisible;
-                          });
-                        },
-                        child: Text(
-                          "Lunch",
-                          style: TextStyle(
-                              color: TColor.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(() {});
+                              },
+                              child: Text(
+                                "Lunch",
+                                style: TextStyle(
+                                    color: TColor.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              width: media.width * 0.02,
+                            ),
+                            Text(
+                              "(${fetchedLunch.length} Items)",
+                              style:
+                                  TextStyle(color: TColor.gray, fontSize: 12),
+                            ),
+                            Expanded(child: Container()),
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            FoodSelectionScreen(
+                                                meal: 'Lunch',
+                                                email: widget.email)),
+                                  );
+                                },
+                                icon: const Icon(
+                                    Icons.add_circle_outline_outlined)),
+                          ],
                         ),
                       ),
-                      SizedBox(
-                        width: media.width * 0.02,
-                      ),
-                     Text(
-                          "(${lunchArr.length} Items | 500 calories)",
-                          style: TextStyle(color: TColor.gray, fontSize: 12),
-                        ),
-                      Expanded(child: Container()),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  const FoodSelectionScreen()),
+                      ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: fetchedLunch.length,
+                          itemBuilder: (context, index) {
+                            var mObj = fetchedLunch[index] as Map? ?? {};
+                            return MealFoodScheduleRow(
+                              mObj: mObj,
+                              index: index,
+                              onCheckboxChanged: (food, isChecked) {
+                                setState(() {
+                                  if (isChecked) {
+                                    updateFoodConsumed(
+                                        food["date"].toString(),
+                                        food["emailId"].toString(),
+                                        isChecked,
+                                        double.parse(food["weight"].toString()),
+                                        food["image"].toString(),
+                                        food["meal"].toString(),
+                                        food["foodName"]
+                                            .toString()
+                                            .toLowerCase());
+                                    //selectedFoodItems.add(foodName);
+                                  } else {
+                                    updateFoodConsumed(
+                                        food["date"].toString(),
+                                        food["emailId"].toString(),
+                                        isChecked,
+                                        double.parse(food["weight"].toString()),
+                                        food["image"].toString(),
+                                        food["meal"].toString(),
+                                        food["foodName"]
+                                            .toString()
+                                            .toLowerCase());
+                                    //selectedFoodItems.remove(foodName);
+                                  }
+                                });
+                              },
                             );
-                          },
-                          icon: const Icon(Icons.add_circle_outline_outlined)),
+                          }),
                     ],
                   ),
                 ),
-                Visibility(
-                  visible: isDropdownLnVisible,
-                  child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: lunchArr.length,
-                      itemBuilder: (context, index) {
-                        var mObj = lunchArr[index] as Map? ?? {};
-                        return MealFoodScheduleRow(
-                          mObj: mObj,
-                          index: index,
-                          onCheckboxChanged: (foodName, isChecked) {
-                            setState(() {
-                              if (isChecked) {
-                                selectedFoodItems.add(foodName);
-                              } else {
-                                selectedFoodItems.remove(foodName);
-                              }
-                            });
-                          },
-                        );
-                      }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  decoration: BoxDecoration(
+                      color: TColor.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black12, blurRadius: 2)
+                      ]),
+                  child: Column(
                     children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            isDropdownSnVisible = !isDropdownSnVisible;
-                          });
-                        },
-                        child: Text(
-                          "Snacks",
-                          style: TextStyle(
-                              color: TColor.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(() {});
+                              },
+                              child: Text(
+                                "Snacks",
+                                style: TextStyle(
+                                    color: TColor.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              width: media.width * 0.02,
+                            ),
+                            Text(
+                              "(${fetchedSnacks.length} Items)",
+                              style:
+                                  TextStyle(color: TColor.gray, fontSize: 12),
+                            ),
+                            Expanded(child: Container()),
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            FoodSelectionScreen(
+                                                meal: 'Snacks',
+                                                email: widget.email)),
+                                  );
+                                },
+                                icon: const Icon(
+                                    Icons.add_circle_outline_outlined)),
+                          ],
                         ),
                       ),
-                      SizedBox(
-                        width: media.width * 0.02,
-                      ),
-                      Text(
-                          "(${snacksArr.length} Items | 140 calories)",
-                          style: TextStyle(color: TColor.gray, fontSize: 12),
-                        ),
-                      Expanded(child: Container()),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  const FoodSelectionScreen()),
+                      ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: fetchedSnacks.length,
+                          itemBuilder: (context, index) {
+                            var mObj = fetchedSnacks[index] as Map? ?? {};
+                            return MealFoodScheduleRow(
+                              mObj: mObj,
+                              index: index,
+                              onCheckboxChanged: (food, isChecked) {
+                                setState(() {
+                                  if (isChecked) {
+                                    updateFoodConsumed(
+                                        food["date"].toString(),
+                                        food["emailId"].toString(),
+                                        isChecked,
+                                        double.parse(food["weight"].toString()),
+                                        food["image"].toString(),
+                                        food["meal"].toString(),
+                                        food["foodName"]
+                                            .toString()
+                                            .toLowerCase());
+                                    // selectedFoodItems.add(foodName);
+                                  } else {
+                                    updateFoodConsumed(
+                                        food["date"].toString(),
+                                        food["emailId"].toString(),
+                                        isChecked,
+                                        double.parse(food["weight"].toString()),
+                                        food["image"].toString(),
+                                        food["meal"].toString(),
+                                        food["foodName"]
+                                            .toString()
+                                            .toLowerCase());
+                                    // selectedFoodItems.remove(foodName);
+                                  }
+                                });
+                              },
                             );
-                          },
-                          icon: const Icon(Icons.add_circle_outline_outlined)),
+                          }),
                     ],
                   ),
                 ),
-                Visibility(
-                  visible: isDropdownSnVisible,
-                  child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: snacksArr.length,
-                      itemBuilder: (context, index) {
-                        var mObj = snacksArr[index] as Map? ?? {};
-                        return MealFoodScheduleRow(
-                          mObj: mObj,
-                          index: index,
-                          onCheckboxChanged: (foodName, isChecked) {
-                            setState(() {
-                              if (isChecked) {
-                                selectedFoodItems.add(foodName);
-                              } else {
-                                selectedFoodItems.remove(foodName);
-                              }
-                            });
-                          },
-                        );
-                      }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  decoration: BoxDecoration(
+                      color: TColor.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black12, blurRadius: 2)
+                      ]),
+                  child: Column(
                     children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            isDropdownDnVisible = !isDropdownDnVisible;
-                          });
-                        },
-                        child: Text(
-                          "Dinner",
-                          style: TextStyle(
-                              color: TColor.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(() {});
+                              },
+                              child: Text(
+                                "Dinner",
+                                style: TextStyle(
+                                    color: TColor.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              width: media.width * 0.02,
+                            ),
+                            Text(
+                              "(${fetchedDinner.length} Items)",
+                              style:
+                                  TextStyle(color: TColor.gray, fontSize: 12),
+                            ),
+                            Expanded(child: Container()),
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            FoodSelectionScreen(
+                                                meal: 'Dinner',
+                                                email: widget.email)),
+                                  );
+                                },
+                                icon: const Icon(
+                                    Icons.add_circle_outline_outlined)),
+                          ],
                         ),
                       ),
-                      SizedBox(
-                        width: media.width * 0.02,
-                      ),
-                      Text(
-                          "(${dinnerArr.length} Items | 120 calories)",
-                          style: TextStyle(color: TColor.gray, fontSize: 12),
-                        ),
-                      Expanded(child: Container()),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  const FoodSelectionScreen()),
+                      ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: fetchedDinner.length,
+                          itemBuilder: (context, index) {
+                            var mObj = fetchedDinner[index] as Map? ?? {};
+                            return MealFoodScheduleRow(
+                              mObj: mObj,
+                              index: index,
+                              onCheckboxChanged: (food, isChecked) {
+                                setState(() {
+                                  if (isChecked) {
+                                    updateFoodConsumed(
+                                        food["date"].toString(),
+                                        food["emailId"].toString(),
+                                        isChecked,
+                                        double.parse(food["weight"].toString()),
+                                        food["image"].toString(),
+                                        food["meal"].toString(),
+                                        food["foodName"]
+                                            .toString()
+                                            .toLowerCase());
+                                    //selectedFoodItems.add(foodName);
+                                  } else {
+                                    updateFoodConsumed(
+                                        food["date"].toString(),
+                                        food["emailId"].toString(),
+                                        isChecked,
+                                        double.parse(food["weight"].toString()),
+                                        food["image"].toString(),
+                                        food["meal"].toString(),
+                                        food["foodName"]
+                                            .toString()
+                                            .toLowerCase());
+                                    // selectedFoodItems.remove(foodName);
+                                  }
+                                });
+                              },
                             );
-                          },
-                          icon: const Icon(Icons.add_circle_outline_outlined)),
+                          }),
                     ],
                   ),
-                ),
-                Visibility(
-                  visible: isDropdownDnVisible,
-                  child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: dinnerArr.length,
-                      itemBuilder: (context, index) {
-                        var mObj = dinnerArr[index] as Map? ?? {};
-                        return MealFoodScheduleRow(
-                          mObj: mObj,
-                          index: index,
-                          onCheckboxChanged: (foodName, isChecked) {
-                            setState(() {
-                              if (isChecked) {
-                                selectedFoodItems.add(foodName);
-                              } else {
-                                selectedFoodItems.remove(foodName);
-                              }
-                            });
-                          },
-                        );
-                      }),
                 ),
                 SizedBox(
                   height: media.width * 0.05,
                 ),
-                Padding(
+                /*Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -507,8 +691,8 @@ class _MealScheduleScreenState extends State<MealScheduleScreen> with TickerProv
                       ),
                     ],
                   ),
-                ),
-                ListView.builder(
+                ),*/
+                /*ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -519,12 +703,18 @@ class _MealScheduleScreenState extends State<MealScheduleScreen> with TickerProv
                       return NutritionRow(
                         nObj: nObj,
                       );
-                    }),
-                TextButton(
-                    onPressed: () {
-                      print(selectedFoodItems);
-                    },
-                    child: Text("click")),
+                    }),*/
+                /*RoundButton(
+                  onPressed: () {
+                    //print(selectedFoodItems);
+                    print(fetchedFoodInfo);
+                    print(fetchedBreakfast);
+                    print(fetchedLunch);
+                    print(fetchedSnacks);
+                    print(fetchedDinner);
+                  },
+                  title: 'Click',
+                ),*/
                 SizedBox(
                   height: media.width * 0.05,
                 )
@@ -536,4 +726,3 @@ class _MealScheduleScreenState extends State<MealScheduleScreen> with TickerProv
     );
   }
 }
-

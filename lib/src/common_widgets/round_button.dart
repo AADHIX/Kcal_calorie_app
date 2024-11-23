@@ -24,9 +24,7 @@ class RoundButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          gradient: LinearGradient(
-              colors: type == RoundButtonType.bgSGradient ? TColor.secondaryG :  TColor.primaryG,
-              ),
+          color: Colors.black,
           borderRadius: BorderRadius.circular(25),
           boxShadow: type == RoundButtonType.bgGradient ||  type == RoundButtonType.bgSGradient 
               ? const [

@@ -5,10 +5,10 @@ class LoginDataChannel {
   static const MethodChannel _channel = MethodChannel('login_data_channel');
 
   static Future<bool> submitLoginData(
-      String username, String password) async {
+      String email, String password) async {
     try {
      bool isTrue = await _channel.invokeMethod(
-          'submitLoginData', {"username": username, "password": password});
+          'submitLoginData', {"email": email, "password": password});
      return isTrue;
     } on PlatformException catch (e) {
       print("Failed to submit form data: '${e.message}'.");

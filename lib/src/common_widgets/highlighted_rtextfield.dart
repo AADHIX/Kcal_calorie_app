@@ -18,28 +18,31 @@ class HighlightRoundTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return TextFormField(
+      style: TextStyle(
+          color:
+          const Color.fromARGB(255, 0, 0, 0)),
       validator: validator,
       keyboardType: keyboardType,
       controller: controller,
       decoration: InputDecoration(
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         prefixIcon: prefixIcon,
         labelText: labelText,
-        labelStyle: const TextStyle(color: Colors.black),
+          labelStyle: TextStyle(
+              color: const Color.fromARGB(255, 0, 0, 0),
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          borderSide: const BorderSide(color: Colors.transparent),
+          borderRadius: BorderRadius.circular(screenHeight * 0.03),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          borderSide: const BorderSide(color: Colors.blue),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
+        filled: true,
+        fillColor: Color.fromARGB(0, 3, 3, 3),
+        hintStyle:
+        TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+        contentPadding: EdgeInsets.symmetric(
+            vertical: screenHeight * 0.03,
+            horizontal: screenHeight * 0.08),
       ),
     );
   }

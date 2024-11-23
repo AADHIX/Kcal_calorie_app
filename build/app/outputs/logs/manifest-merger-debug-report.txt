@@ -1,8 +1,8 @@
 -- Merging decision tree log ---
 application
 INJECTED from C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\android\app\src\main\AndroidManifest.xml:2:5-32:19
-MERGED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-19:19
-MERGED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-19:19
+MERGED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-34:19
+MERGED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-34:19
 MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\gokul\.gradle\caches\transforms-3\032f4dff274e516110d9363a9793a3e3\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:24:5-31:19
 MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\gokul\.gradle\caches\transforms-3\032f4dff274e516110d9363a9793a3e3\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:24:5-31:19
 MERGED from [androidx.core:core:1.10.1] C:\Users\gokul\.gradle\caches\transforms-3\0b9c903fef8d2eb2a269c36999ef4a74\transformed\core-1.10.1\AndroidManifest.xml:28:5-89
@@ -31,10 +31,11 @@ INJECTED from C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\androi
 INJECTED from C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\android\app\src\main\AndroidManifest.xml:1:1-44:12
 INJECTED from C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\android\app\src\main\AndroidManifest.xml:1:1-44:12
 MERGED from C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\android\app\src\main\AndroidManifest.xml:1:1-44:12
-MERGED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-21:12
+MERGED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-36:12
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:simple_animation_progress_bar] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\simple_animation_progress_bar\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:flutter_keyboard_visibility] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\flutter_keyboard_visibility\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:path_provider_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:camera] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\camera\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-12:12
 MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\gokul\.gradle\caches\transforms-3\d16d53746166143fe30054cbfe559e31\transformed\fragment-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.activity:activity:1.7.2] C:\Users\gokul\.gradle\caches\transforms-3\7e30f4b09ad63b0fe951adc42de2658a\transformed\jetified-activity-1.7.2\AndroidManifest.xml:17:1-22:12
@@ -98,14 +99,16 @@ uses-sdk
 INJECTED from C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\android\app\src\main\AndroidManifest.xml
 INJECTED from C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\android\app\src\main\AndroidManifest.xml
-MERGED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:6:5-8:41
+MERGED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:6:5-8:41
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:simple_animation_progress_bar] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\simple_animation_progress_bar\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:simple_animation_progress_bar] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\simple_animation_progress_bar\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_keyboard_visibility] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\flutter_keyboard_visibility\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_keyboard_visibility] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\flutter_keyboard_visibility\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:path_provider_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:path_provider_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:camera] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\camera\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:camera] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\camera\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\gokul\.gradle\caches\transforms-3\d16d53746166143fe30054cbfe559e31\transformed\fragment-1.1.0\AndroidManifest.xml:20:5-22:41
@@ -182,21 +185,43 @@ ADDED from C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\android\a
 	android:name
 		ADDED from C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\android\app\src\debug\AndroidManifest.xml:6:22-64
 provider#io.flutter.plugins.imagepicker.ImagePickerFileProvider
-ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:10:9-18:20
+ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:11:9-19:20
 	android:grantUriPermissions
-		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-47
+		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:15:13-47
 	android:authorities
-		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-74
+		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-74
 	android:exported
-		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-37
+		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-37
 	android:name
-		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-82
+		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-82
 meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:15:13-17:75
+ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-18:75
 	android:resource
-		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:17:17-72
+		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:18:17-72
 	android:name
-		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:16:17-67
+		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:17:17-67
+service#com.google.android.gms.metadata.ModuleDependencies
+ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:21:9-33:19
+	android:enabled
+		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:23:13-36
+	android:exported
+		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:24:13-37
+	tools:ignore
+		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:25:13-40
+	android:name
+		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:22:13-78
+intent-filter#action:name:com.google.android.gms.metadata.MODULE_DEPENDENCIES
+ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:26:13-28:29
+action#com.google.android.gms.metadata.MODULE_DEPENDENCIES
+ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:27:17-94
+	android:name
+		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:27:25-91
+meta-data#photopicker_activity:0:required
+ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:30:13-32:36
+	android:value
+		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:32:17-33
+	android:name
+		ADDED from [:image_picker_android] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:31:17-63
 uses-permission#android.permission.CAMERA
 ADDED from [:camera] C:\Users\gokul\Downloads\calory-20240402T184113Z-001\calory\build\camera\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-65
 	android:name

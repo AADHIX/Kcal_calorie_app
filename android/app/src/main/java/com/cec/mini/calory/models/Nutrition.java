@@ -4,6 +4,15 @@ public class Nutrition {
 
 
     private String foodName;
+    private String foodImagePath;
+
+    public String getFoodImagePath() {
+        return foodImagePath;
+    }
+
+    public void setFoodImagePath(String foodImagePath) {
+        this.foodImagePath = foodImagePath;
+    }
 
     public String getFoodName() {
         return foodName;

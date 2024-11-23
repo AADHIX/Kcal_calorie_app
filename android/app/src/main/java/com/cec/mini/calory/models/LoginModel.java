@@ -2,6 +2,7 @@ package com.cec.mini.calory.models;
 
 public class LoginModel {
     private String username;
+    private String email;
     private String password;
     private boolean active;
 
@@ -12,6 +13,14 @@ public class LoginModel {
 
     public void setLoginUsername(String username) {
         this.username = username;
+    }
+
+    public String getLoginEmail() {
+        return email;
+    }
+
+    public void setLoginEmail(String email) {
+        this.email = email;
     }
 
     public String getLoginPassword() {

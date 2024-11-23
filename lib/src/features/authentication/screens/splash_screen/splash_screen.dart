@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'package:calory/src/features/authentication/screens/welcome_screen/welcome_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-
-import '../login_screen/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -19,12 +16,12 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (BuildContext context) => const WelcomeScreen())));
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.green,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
-            child: Lottie.asset("assets/gif/iPhone 14 & 15 Pro Max - 45.json"),
+          Center(
+              child: Image.asset("assets/logo/Group 83.png",height: 100,width: 100),
           ),
         ],
       ),

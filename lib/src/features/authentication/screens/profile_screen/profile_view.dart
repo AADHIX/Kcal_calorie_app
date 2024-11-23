@@ -1,4 +1,8 @@
+import 'package:bounce/bounce.dart';
+import 'package:calory/src/common/channels/dart_to_java_channels/show_profile_channel.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../../../../common_widgets/calorie_diet_view.dart';
 import '../../../../common_widgets/round_button.dart';
 import '../../../../common_widgets/setting_row.dart';
 import '../../../../common_widgets/title_subtitle_cell.dart';
@@ -6,35 +10,66 @@ import '../../../../constants/colors.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 class ProfileView extends StatefulWidget {
-  const ProfileView({super.key});
+  final String email;
+  const ProfileView({super.key,required this.email});
 
   @override
   State<ProfileView> createState() => _ProfileViewState();
 }
 
-class _ProfileViewState extends State<ProfileView> {
-  bool positive = false;
+class _ProfileViewState extends State<ProfileView> with TickerProviderStateMixin{
 
-  List accountArr = [
-    {"image": "assets/images/p_personal.png", "name": "Personal Data", "tag": "1"},
-    {"image": "assets/images/p_achi.png", "name": "Achievement", "tag": "2"},
-    {
-      "image": "assets/images/p_activity.png",
-      "name": "Activity History",
-      "tag": "3"
-    },
-    {
-      "image": "assets/images/p_workout.png",
-      "name": "Workout Progress",
-      "tag": "4"
+  late int height = 0;
+  late int age = 0;
+  late int weight = 0;
+  late String name = "";
+  late String activityLevel = "";
+  late String gender = "";
+  late String currentDate;
+
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+    _animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_controller);
+    _controller.forward();
+    fetchUser();
+    currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  }
+
+  Future<void> fetchUser()async{
+    final Map<dynamic, dynamic>? userInfo =
+    await ShowProfileDataChannel.getUserProfile(widget.email);
+    if(userInfo != null){
+      final double height = userInfo['height'];
+      final int age = userInfo['age'];
+      final double weight = userInfo['weight'];
+      final String name = userInfo['name'];
+      final String activityLevel = userInfo['activityLevel'];
+      final String gender = userInfo['gender'];
+
+      setState(() {
+       this.height = height.truncate();
+       this.age = age;
+       this.weight = weight.truncate();
+       this.name = name;
+       this.activityLevel = activityLevel;
+       this.gender = gender;
+      });
+    }else{
+      print('Failed to retrieve user data.');
     }
-  ];
-
-  List otherArr = [
-    {"image": "assets/images/p_contact.png", "name": "Contact Us", "tag": "5"},
-    {"image": "assets/images/p_privacy.png", "name": "Privacy Policy", "tag": "6"},
-    {"image": "assets/images/p_setting.png", "name": "Setting", "tag": "7"},
-  ];
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,26 +83,6 @@ class _ProfileViewState extends State<ProfileView> {
           style: TextStyle(
               color: TColor.black, fontSize: 16, fontWeight: FontWeight.w700),
         ),
-        actions: [
-          InkWell(
-            onTap: () {},
-            child: Container(
-              margin: const EdgeInsets.all(8),
-              height: 40,
-              width: 40,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: TColor.lightGray,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Image.asset(
-                "assets/images/more_btn.png",
-                width: 15,
-                height: 15,
-                fit: BoxFit.contain,
-              ),
-            ),
-          )
-        ],
       ),
       backgroundColor: TColor.white,
       body: SingleChildScrollView(
@@ -80,8 +95,8 @@ class _ProfileViewState extends State<ProfileView> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(30),
-                    child: Image.asset(
-                      "assets/images/u2.png",
+                    child: Image.asset(gender.toLowerCase() == 'female'?
+                      "assets/images/u2.png":"assets/images/male.png",
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,
@@ -95,7 +110,7 @@ class _ProfileViewState extends State<ProfileView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Stefani Wong",
+                          name,
                           style: TextStyle(
                             color: TColor.black,
                             fontSize: 14,
@@ -103,7 +118,7 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                         ),
                         Text(
-                          "Lose a Fat Program",
+                          activityLevel,
                           style: TextStyle(
                             color: TColor.gray,
                             fontSize: 12,
@@ -121,12 +136,6 @@ class _ProfileViewState extends State<ProfileView> {
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                       onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const ActivityTrackerView(),
-                        //   ),
-                        // );
                       },
                     ),
                   )
@@ -135,20 +144,20 @@ class _ProfileViewState extends State<ProfileView> {
               const SizedBox(
                 height: 15,
               ),
-              const Row(
+               Row(
                 children: [
                   Expanded(
                     child: TitleSubtitleCell(
-                      title: "180cm",
+                      title: "$height cm",
                       subtitle: "Height",
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 15,
                   ),
                   Expanded(
                     child: TitleSubtitleCell(
-                      title: "65kg",
+                      title: "$weight kg",
                       subtitle: "Weight",
                     ),
                   ),
@@ -157,7 +166,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   Expanded(
                     child: TitleSubtitleCell(
-                      title: "22yo",
+                      title: "$age yo",
                       subtitle: "Age",
                     ),
                   ),
@@ -166,195 +175,14 @@ class _ProfileViewState extends State<ProfileView> {
               const SizedBox(
                 height: 25,
               ),
-              Container(
-                padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                decoration: BoxDecoration(
-                    color: TColor.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black12, blurRadius: 2)
-                    ]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Account",
-                      style: TextStyle(
-                        color: TColor.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: accountArr.length,
-                      itemBuilder: (context, index) {
-                        var iObj = accountArr[index] as Map? ?? {};
-                        return SettingRow(
-                          icon: iObj["image"].toString(),
-                          title: iObj["name"].toString(),
-                          onPressed: () {},
-                        );
-                      },
-                    )
-                  ],
+              Bounce(
+                child: CalorieDietView(
+                    animationController: _controller,
+                    animation: _animation,
+                    email: widget.email,
+                    date: currentDate
                 ),
               ),
-              const SizedBox(
-                height: 25,
-              ),
-              Container(
-                padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                decoration: BoxDecoration(
-                    color: TColor.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black12, blurRadius: 2)
-                    ]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Notification",
-                      style: TextStyle(
-                        color: TColor.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    SizedBox(
-                      height: 30,
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset("assets/images/p_notification.png",
-                                height: 15, width: 15, fit: BoxFit.contain),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Expanded(
-                              child: Text(
-                                "Pop-up Notification",
-                                style: TextStyle(
-                                  color: TColor.black,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            CustomAnimatedToggleSwitch<bool>(
-                              current: positive,
-                              values: [false, true],
-                              dif: 0.0,
-                              indicatorSize: Size.square(30.0),
-                              animationDuration:
-                              const Duration(milliseconds: 200),
-                              animationCurve: Curves.linear,
-                              onChanged: (b) => setState(() => positive = b),
-                              iconBuilder: (context, local, global) {
-                                return const SizedBox();
-                              },
-                              defaultCursor: SystemMouseCursors.click,
-                              onTap: () => setState(() => positive = !positive),
-                              iconsTappable: false,
-                              wrapperBuilder: (context, global, child) {
-                                return Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Positioned(
-                                        left: 10.0,
-                                        right: 10.0,
-
-                                        height: 30.0,
-                                        child: DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(
-                                                colors: TColor.secondaryG),
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                                Radius.circular(50.0)),
-                                          ),
-                                        )),
-                                    child,
-                                  ],
-                                );
-                              },
-                              foregroundIndicatorBuilder: (context, global) {
-                                return SizedBox.fromSize(
-                                  size: const Size(10, 10),
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      color: TColor.white,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(50.0)),
-                                      boxShadow: const [
-                                        BoxShadow(
-                                            color: Colors.black38,
-                                            spreadRadius: 0.05,
-                                            blurRadius: 1.1,
-                                            offset: Offset(0.0, 0.8))
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ]),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              Container(
-                padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                decoration: BoxDecoration(
-                    color: TColor.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black12, blurRadius: 2)
-                    ]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Other",
-                      style: TextStyle(
-                        color: TColor.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                      itemCount: otherArr.length,
-                      itemBuilder: (context, index) {
-                        var iObj = otherArr[index] as Map? ?? {};
-                        return SettingRow(
-                          icon: iObj["image"].toString(),
-                          title: iObj["name"].toString(),
-                          onPressed: () {},
-                        );
-                      },
-                    )
-                  ],
-                ),
-              )
             ],
           ),
         ),

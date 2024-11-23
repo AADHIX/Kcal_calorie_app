@@ -3,12 +3,16 @@ import 'package:calory/src/features/authentication/screens/login_screen/login_sc
 import 'package:calory/src/features/authentication/screens/main_tab/main_tab_view.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import '../../../../common/channels/dart_to_java_channels/signUp_channel.dart';
 import '../../../../common_widgets/round_button.dart';
 import '../../../../constants/colors.dart';
 import 'package:calory/src/constants/image_strings.dart';
 import 'package:calory/src/constants/text_string.dart';
 
 class ActivityLevelScreen extends StatefulWidget {
+  final String username;
+  final String email;
+  final String password;
   final String selectedGender;
   final int selectedAge;
   final double selectedHeight;
@@ -19,7 +23,10 @@ class ActivityLevelScreen extends StatefulWidget {
       required this.selectedGender,
       required this.selectedAge,
       required this.selectedWeight,
-      required this.selectedHeight});
+      required this.selectedHeight,
+      required this.username,
+      required this.password,
+      required this.email});
 
   @override
   State<ActivityLevelScreen> createState() => _ActivityLevelScreenState();
@@ -148,15 +155,30 @@ class _ActivityLevelScreenState extends State<ActivityLevelScreen> {
                   ),
                   RoundButton(
                     title: "Confirm",
-                    onPressed: () {
-                      double bmr = CalculateBMR.calculateBMR(widget.selectedWeight, widget.selectedHeight, widget.selectedAge, widget.selectedGender);
-                      dailyCalorieIntake = CalculateBMR().calculateDailyCalorieIntake(bmr, selectedTitle);
+                    onPressed: () async {
+                      double bmr = CalculateBMR.calculateBMR(
+                          widget.selectedWeight,
+                          widget.selectedHeight,
+                          widget.selectedAge,
+                          widget.selectedGender);
+                      dailyCalorieIntake = CalculateBMR()
+                          .calculateDailyCalorieIntake(bmr, selectedTitle);
                       print(selectedTitle);
                       print(widget.selectedGender);
                       print(widget.selectedAge);
                       print(widget.selectedHeight);
                       print(widget.selectedWeight);
                       print(dailyCalorieIntake);
+                      await SignUpDataChannel.submitSignUpData(
+                          widget.username,
+                          widget.email,
+                          widget.password,
+                          widget.selectedGender,
+                          widget.selectedAge,
+                          widget.selectedWeight,
+                          widget.selectedHeight,
+                          selectedTitle,
+                          dailyCalorieIntake);
                       Navigator.push(
                         context,
                         MaterialPageRoute(

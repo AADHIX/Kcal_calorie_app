@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 
@@ -7,11 +8,11 @@ class MealSelectionRow extends StatefulWidget {
   final Function onItemTapped; // Add the callback function
 
   const MealSelectionRow({
-    super.key,
+    Key? key,
     required this.mObj,
     required this.index,
     required this.onItemTapped, // Required callback parameter
-  });
+  }) : super(key: key);
 
   @override
   State<MealSelectionRow> createState() => _MealSelectionRowState();
@@ -36,8 +37,8 @@ class _MealSelectionRowState extends State<MealSelectionRow> {
                         : TColor.secondaryColor2.withOpacity(0.4),
                     borderRadius: BorderRadius.circular(10)),
                 alignment: Alignment.center,
-                child: Image.asset(
-                  widget.mObj["image"].toString(),
+                child: Image.file(
+                  File(widget.mObj["image"].toString()), // Load image from file
                   width: 40,
                   height: 40,
                   fit: BoxFit.contain,

@@ -1,13 +1,9 @@
-import 'package:calory/src/common/channels/dart_to_java_channels/signUp_channel.dart';
+import 'package:calory/src/features/authentication/screens/get_profile_screen/get_gender_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../common/validation/validation.dart';
 import '../../../../common_widgets/highlighted_rtextfield.dart';
-import '../../../../constants/colors.dart';
-import '../../../../constants/image_strings.dart';
-import '../../../../constants/sizes.dart';
 import '../../../../constants/text_string.dart';
-import '../get_profile_screen/get_profile_screen.dart';
 import '../login_screen/login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -27,227 +23,220 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: TColor.white,
         body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(defaultSize),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image(
-                  image: const AssetImage(splashImage),
-                  height: size.height * 0.2,
-                ),
-                const Text(hey, style: TextStyle(color: Colors.black),),
-                const Text(create, style: TextStyle(color: Colors.black),),
-                Form(
-                  key: formField,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        HighlightRoundTextField(
-                            keyboardType: TextInputType.text,
-                            controller: nameController,
-                            labelText: uName,
-                            prefixIcon:
-                                const Icon(Icons.person_outline_outlined, color: Colors.black,),
-                            validator: Validation.validateUsername),
-                        const SizedBox(height: defaultSize),
-                        HighlightRoundTextField(
-                            keyboardType: TextInputType.emailAddress,
-                            controller: emailController,
-                            labelText: email,
-                            prefixIcon: const Icon(Icons.email_outlined, color: Colors.black,),
-                            validator: Validation.validateEmail),
-                        const SizedBox(height: defaultSize),
-                        TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          controller: passController,
-                          obscureText: passToggle,
-                          validator: Validation.validatePassword,
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 20),
-                            prefixIcon: const Icon(Icons.fingerprint, color: Colors.black,),
-                            labelText: uPassword,
-                            labelStyle: const TextStyle(color: Colors.black),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                              // Adjust the radius as needed
-                              borderSide:
-                                  const BorderSide(color: Colors.transparent),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                              // Adjust the radius as needed
-                              borderSide: const BorderSide(
-                                  color: Colors.blue), // Color when focused
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                              // Adjust the radius as needed
-                              borderSide: const BorderSide(
-                                  color: Colors
-                                      .transparent), // Color when enabled but not focused
-                            ),
-                            suffix: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  passToggle = !passToggle;
-                                });
-                              },
-                              child: Icon(
-                                passToggle
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: Colors.blue,
-                              ),
-                            ),
+          padding: const EdgeInsets.only(bottom: 20.0),
+          child: Padding(
+              padding: EdgeInsets.all(screenWidth * 0.05),
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: screenHeight * 0.06),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Create Account',
+                          style: TextStyle(
+                            fontFamily: 'Viga',
+                            fontSize: 70,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: defaultSize),
-                        TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          controller: confPassController,
-                          obscureText: passToggle,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Enter Password";
-                            } else if (value != passController.text) {
-                              return 'Passwords do not match';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 20),
-                            prefixIcon: const Icon(Icons.fingerprint, color: Colors.black,),
-                            labelText: confPass,
-                            labelStyle: const TextStyle(color: Colors.black),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                              // Adjust the radius as needed
-                              borderSide:
-                                  const BorderSide(color: Colors.transparent),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                              // Adjust the radius as needed
-                              borderSide: const BorderSide(
-                                  color: Colors.blue), // Color when focused
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                              // Adjust the radius as needed
-                              borderSide: const BorderSide(
-                                  color: Colors
-                                      .transparent), // Color when enabled but not focused
-                            ),
-                            suffix: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  passToggle = !passToggle;
-                                });
-                              },
-                              child: Icon(
-                                passToggle
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: Colors.blue,
-                              ),
-                            ),
+                      ),
+                      SizedBox(height: screenHeight * 0.03),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Please fill to create an account',
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.03,
+                            fontFamily: 'Viga',
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: loginSpace),
-                        SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: accentColor,
-                                  foregroundColor: darkColor),
-                              onPressed: () {
-                                if (formField.currentState!.validate()) {
-
-                                  String username = nameController.text;
-                                  String emailTxt = emailController.text;
-                                  String password = passController.text;
-                                  SignUpDataChannel.submitSignUpData(username, emailTxt, password);
-
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const GetProfileScreen()),
-                                  );
-                                }
-                              },
-                              child: Text(
-                                signUp.toUpperCase(),
+                      ),
+                      SizedBox(height: screenHeight * 0.04),
+                      Form(
+                        key: formField,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              HighlightRoundTextField(
+                                  keyboardType: TextInputType.text,
+                                  controller: nameController,
+                                  labelText: uName,
+                                  prefixIcon: const Icon(
+                                    Icons.person_outline_outlined,
+                                    color: Colors.black,
+                                  ),
+                                  validator: Validation.validateUsername),
+                              SizedBox(height: screenHeight * 0.04),
+                              HighlightRoundTextField(
+                                  keyboardType: TextInputType.emailAddress,
+                                  controller: emailController,
+                                  labelText: email,
+                                  prefixIcon: const Icon(
+                                    Icons.email_outlined,
+                                    color: Colors.black,
+                                  ),
+                                  validator: Validation.validateEmail),
+                              SizedBox(height: screenHeight * 0.04),
+                              TextFormField(
                                 style: const TextStyle(
-                                  color: whiteColor,
+                                    color: Color.fromARGB(255, 0, 0, 0)),
+                                keyboardType: TextInputType.emailAddress,
+                                controller: passController,
+                                validator: Validation.validatePassword,
+                                obscureText: passToggle,
+                                decoration: InputDecoration(
+                                  labelStyle: const TextStyle(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: screenHeight * 0.03,
+                                      horizontal: screenHeight * 0.08),
+                                  labelText: uPassword,
+                                  prefixIcon: const Icon(Icons.lock,
+                                      color: Color.fromARGB(255, 0, 0, 0)),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        screenHeight * 0.03),
+                                  ),
+                                  filled: true,
+                                  fillColor: const Color.fromARGB(0, 0, 0, 0),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(passToggle
+                                        ? Icons.visibility
+                                        : Icons.visibility_off),
+                                    onPressed: () {
+                                      setState(() {
+                                        passToggle = !passToggle;
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
-                            )),
-                        const SizedBox(height: loginSpace),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Text("OR"),
-                            const SizedBox(height: loginSpace),
-                            SizedBox(
-                              width: double.infinity,
-                              child: OutlinedButton.icon(
-                                  icon: const Image(
-                                    image: AssetImage(googleIcon),
-                                    width: 20.0,
-                                  ),
-                                  onPressed: () {},
-                                  label: const Text(google)),
-                            ),
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LoginScreen()),
-                                  );
+                              SizedBox(height: screenHeight * 0.04),
+                              TextFormField(
+                                style: const TextStyle(
+                                    color: Color.fromARGB(255, 0, 0, 0)),
+                                keyboardType: TextInputType.emailAddress,
+                                controller: confPassController,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Enter Password";
+                                  } else if (value != passController.text) {
+                                    return 'Passwords do not match';
+                                  }
+                                  return null;
                                 },
-                                child: Text.rich(TextSpan(children: [
-                                  const TextSpan(text: alreadyAccount),
-                                  TextSpan(text: login.toUpperCase())
-                                ])))
-                          ],
-                        )
-                      ],
-                    ),
+                                obscureText: passToggle,
+                                decoration: InputDecoration(
+                                  labelStyle: const TextStyle(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: screenHeight * 0.03,
+                                      horizontal: screenHeight * 0.08),
+                                  labelText: confPass,
+                                  prefixIcon: const Icon(Icons.lock,
+                                      color: Color.fromARGB(255, 0, 0, 0)),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        screenHeight * 0.03),
+                                  ),
+                                  filled: true,
+                                  fillColor: const Color.fromARGB(0, 0, 0, 0),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(passToggle
+                                        ? Icons.visibility
+                                        : Icons.visibility_off),
+                                    onPressed: () {
+                                      setState(() {
+                                        passToggle = !passToggle;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: screenHeight * 0.04),
+                              Container(
+                                width: double.infinity,
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    if (formField.currentState!.validate()) {
+                                      String username = nameController.text;
+                                      String emailTxt = emailController.text;
+                                      String password = passController.text;
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                GetGenderScreen(
+                                                    username: username,
+                                                    password: password,
+                                                    email: emailTxt)),
+                                      );
+                                    }
+                                  },
+                                  color: Colors.black,
+                                  textColor: Colors.white,
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: screenHeight * 0.030,
+                                    horizontal: screenWidth * 0.04,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        screenWidth * 0.08),
+                                  ),
+                                  child: Text(
+                                    signUp.toUpperCase(),
+                                    style:
+                                        TextStyle(fontSize: screenWidth * 0.04),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: screenHeight * 0.02),
+                              Align(
+                                alignment: Alignment.center,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LoginScreen()),
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Already have an account? Login",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-          ),
+                ],
+              )),
         ),
       ),
     );
   }
 }
-
-/*class SignUpDataChannel {
-  // nutrients channel
-  static const MethodChannel _channel = MethodChannel('signup_data_channel');
-
-  static Future<void> submitNutrientsData(
-      String username, String email, String password) async {
-    try {
-      await _channel.invokeMethod(
-          'submitSignupData', {"username": username, "email": email, "password": password});
-    } on PlatformException catch (e) {
-      print("Failed to submit form data: '${e.message}'.");
-    }
-  }
-}*/

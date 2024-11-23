@@ -1,11 +1,13 @@
+import 'dart:ffi';
+import 'dart:io';
 import 'package:flutter/material.dart';
-
+import '../common/channels/dart_to_java_channels/meal_schedule_channel.dart';
 import '../constants/colors.dart';
 
 class MealFoodScheduleRow extends StatefulWidget {
   final Map mObj;
   final int index;
-  final Function(String foodName, bool isChecked) onCheckboxChanged;
+  final Function(Map food, bool isChecked) onCheckboxChanged;
 
   const MealFoodScheduleRow(
       {super.key,
@@ -18,10 +20,19 @@ class MealFoodScheduleRow extends StatefulWidget {
 }
 
 class _MealFoodScheduleRowState extends State<MealFoodScheduleRow> {
-  bool isChecked = false;
+  late bool isChecked;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isChecked = widget.mObj["consumed"];
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    isChecked = widget.mObj["consumed"];
     return Container(
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
         child: Row(
@@ -37,8 +48,8 @@ class _MealFoodScheduleRowState extends State<MealFoodScheduleRow> {
                         : TColor.secondaryColor2.withOpacity(0.4),
                     borderRadius: BorderRadius.circular(10)),
                 alignment: Alignment.center,
-                child: Image.asset(
-                  widget.mObj["image"].toString(),
+                child: Image.file(
+                  File(widget.mObj["image"].toString()), // Load image from file
                   width: 40,
                   height: 40,
                   fit: BoxFit.contain,
@@ -53,16 +64,23 @@ class _MealFoodScheduleRowState extends State<MealFoodScheduleRow> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.mObj["name"].toString(),
+                    widget.mObj["foodName"].toString().toUpperCase(),
                     style: TextStyle(
                         color: TColor.black,
                         fontSize: 12,
                         fontWeight: FontWeight.w700),
                   ),
                   Text(
-                    widget.mObj["time"].toString(),
+                    '${double.parse(widget.mObj["calories"].toString()).ceil()} kcal for ${widget.mObj["weight"].toString().toUpperCase()} gm',
                     style: TextStyle(
-                      color: TColor.gray,
+                      color: TColor.black,
+                      fontSize: 10,
+                    ),
+                  ),
+                  Text(
+                    '${double.parse(widget.mObj["protein"].toString())} protein ${double.parse(widget.mObj["carbohydrate"].toString()).ceil()} carbs ${double.parse(widget.mObj["fat"].toString()).ceil()} fat',
+                    style: TextStyle(
+                      color: TColor.black,
                       fontSize: 10,
                     ),
                   ),
@@ -75,7 +93,8 @@ class _MealFoodScheduleRowState extends State<MealFoodScheduleRow> {
                   setState(() {
                     isChecked = value!;
                   });
-                  widget.onCheckboxChanged(widget.mObj["name"].toString(), isChecked);  // Call the callback function when the checkbox state changes
+                  widget.onCheckboxChanged(widget.mObj,
+                      isChecked); // Call the callback function when the checkbox state changes
                 }),
           ],
         ));

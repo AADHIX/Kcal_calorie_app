@@ -1,224 +1,37 @@
+import 'package:calory/src/common/channels/dart_to_java_channels/get_food_names_channel.dart';
 import 'package:calory/src/common_widgets/meal_selection_row.dart';
+import 'package:calory/src/common_widgets/round_button.dart';
+import 'package:calory/src/features/authentication/screens/main_tab/main_tab_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import '../../../../constants/colors.dart';
-import '../../../../constants/image_strings.dart';
 import 'helpers/food_quantity.dart';
 
-/*class FoodSelectionScreen extends StatefulWidget {
-  const FoodSelectionScreen({super.key});
-
-  @override
-  State<FoodSelectionScreen> createState() => _FoodSelectionScreenState();
-}
-
-class _FoodSelectionScreenState extends State<FoodSelectionScreen> {
-  List foodListArr = [
-    {"name": "Honey Pancake", "image": splashImage},
-    {"name": "Coffee", "image": splashImage},
-    {"name": "Chicken Steak", "image": splashImage},
-    {"name": "Milk", "image": splashImage},
-    {"name": "Orange", "image": splashImage},
-    {"name": "Apple Pie", "image": splashImage},
-    {"name": "Salad", "image": splashImage},
-    {"name": "Oatmeal", "image": splashImage},
-  ];
-
-  TextEditingController searchController = TextEditingController();
-
-  static final List<String> _items = [
-    'Apple',
-    'Banana',
-    'Cherry',
-    'Date',
-    'Elderberry',
-    'Fig',
-    'Grapes',
-    // Add more items here...
-  ];
-
-
-  @override
-  Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: TColor.white,
-        centerTitle: false,
-        elevation: 0,
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            margin: const EdgeInsets.all(8),
-            height: 40,
-            width: 40,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: TColor.lightGray,
-                borderRadius: BorderRadius.circular(10)),
-            child: Image.asset(
-              "assets/images/black_btn.png",
-              width: 15,
-              height: 15,
-              fit: BoxFit.contain,
-            ),
-          ),
-        ),
-        title: Text(
-          "Select Food",
-          style: TextStyle(
-              color: TColor.black, fontSize: 16, fontWeight: FontWeight.w700),
-        ),
-        actions: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: media.width * 0.03,
-              ),
-              Text(
-                "Add your own food",
-                style: TextStyle(
-                    color: TColor.black,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700),
-              ),
-              SizedBox(
-                width: media.width * 0.05,
-              ),
-            ],
-          ),
-        ],
-      ),
-      backgroundColor: TColor.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            decoration: BoxDecoration(
-                color: TColor.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 2,
-                      offset: Offset(0, 1))
-                ]),
-            child: Row(
-              children: [
-                Expanded(
-                    child:
-                    TextField(
-                      controller: searchController,
-                      decoration: InputDecoration(
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          prefixIcon: Image.asset(
-                            "assets/images/search.png",
-                            width: 25,
-                            height: 25,
-                          ),
-                          hintText: "Search Pancake"),
-                    )),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  width: 1,
-                  height: 25,
-                  color: TColor.gray.withOpacity(0.3),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: Image.asset(
-                    "assets/images/filter.png",
-                    width: 25,
-                    height: 25,
-                  ),
-                )
-              ],
-            ),
-          ),
-
-          Expanded(
-              child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: foodListArr.length,
-                    itemBuilder: (context, index) {
-                      var mObj = foodListArr[index] as Map? ?? {};
-                      return MealSelectionRow(
-                        mObj: mObj,
-                        index: index,
-                      );
-                    }),
-              ],
-            ),
-          ))
-        ],
-      ),
-    );
-  }
-}*/
-
 class FoodSelectionScreen extends StatefulWidget {
-  const FoodSelectionScreen({super.key});
+  final String meal;
+  final String email;
+
+
+  const FoodSelectionScreen({super.key, required this.meal, required this.email});
 
   @override
   State<FoodSelectionScreen> createState() => _FoodSelectionScreenState();
 }
 
 class _FoodSelectionScreenState extends State<FoodSelectionScreen> {
-  List<Map<String, String>> foodListArr = [
-    {"name": "Honey Pancake", "image": splashImage},
-    {"name": "Coffee", "image": splashImage},
-    {"name": "Chicken Steak", "image": splashImage},
-    {"name": "Milk", "image": splashImage},
-    {"name": "Orange", "image": splashImage},
-    {"name": "Apple Pie", "image": splashImage},
-    {"name": "Salad", "image": splashImage},
-    {"name": "Oatmeal", "image": splashImage},
-    {"name": "Honey Pancake", "image": splashImage},
-    {"name": "Coffee", "image": splashImage},
-    {"name": "Chicken Steak", "image": splashImage},
-    {"name": "Milk", "image": splashImage},
-    {"name": "Orange", "image": splashImage},
-    {"name": "Apple Pie", "image": splashImage},
-    {"name": "Salad", "image": splashImage},
-    {"name": "Oatmeal", "image": splashImage},
-    {"name": "Honey Pancake", "image": splashImage},
-    {"name": "Coffee", "image": splashImage},
-    {"name": "Chicken Steak", "image": splashImage},
-    {"name": "Milk", "image": splashImage},
-    {"name": "Orange", "image": splashImage},
-    {"name": "Apple Pie", "image": splashImage},
-    {"name": "Salad", "image": splashImage},
-    {"name": "Oatmeal", "image": splashImage},
-    {"name": "Honey Pancake", "image": splashImage},
-    {"name": "Coffee", "image": splashImage},
-    {"name": "Chicken Steak", "image": splashImage},
-    {"name": "Milk", "image": splashImage},
-    {"name": "Orange", "image": splashImage},
-    {"name": "Apple Pie", "image": splashImage},
-    {"name": "Salad", "image": splashImage},
-    {"name": "Oatmeal", "image": splashImage},
-    {"name": "Honey Pancake", "image": splashImage},
-    {"name": "Coffee", "image": splashImage},
-    {"name": "Chicken Steak", "image": splashImage},
-    {"name": "Milk", "image": splashImage},
-    {"name": "Orange", "image": splashImage},
-    {"name": "Apple Pie", "image": splashImage},
-    {"name": "Salad", "image": splashImage},
-    {"name": "Oatmeal", "image": splashImage}
-    // Add more items here...
-  ];
+
+  late String foodName;
+  late String foodWeight;
+  late String currentDate;
+
+  List<Map<String, String>> foodListArr = [];
+
+  late int count;
+
+  List<dynamic>? fetchedFoodNames;
+  List<dynamic>? fetchedFoodImages;
 
   // List to hold selected food items and their quantities
   List<Map<String, dynamic>> selectedFoodList = [];
@@ -250,21 +63,73 @@ class _FoodSelectionScreenState extends State<FoodSelectionScreen> {
 
   @override
   void initState() {
+    count = 0;
     super.initState();
     // Initialize the filtered list with all items initially
-    filteredFoodList = List.from(foodListArr);
+    fetchFoodData();
+    //filteredFoodList = List.from(foodListArr);
+    currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  }
 
+  Future<void> fetchFoodData() async {
+    await fetchFood(); // Wait for fetchFood to complete
+    setState(() {
+      // Initialize the filtered list with all items initially
+      filteredFoodList = List.from(foodListArr);
+    });
     // Load the first page of data
-    _loadMoreData();
-
+    //_loadMoreData();
     // Add a listener to the scroll controller to detect when the user has scrolled to the bottom
     _scrollController.addListener(() {
       // Load more data when the user reaches the bottom of the list
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        _loadMoreData();
+        //_loadMoreData();
       }
     });
+  }
+
+  void _incrementCountAndDbCall() {
+    setState(() {
+      count++; // Increment the count value
+    });
+    print(foodName);
+    print(foodWeight);
+    print(currentDate);
+   // submitToDb();
+  }
+
+  /*Future<void> submitToDb() async {
+     await FoodSearchDataChannel.submitSelectedFoodData(foodName, foodWeight, widget.email, currentDate, widget.meal);
+  }*/
+
+
+  Future<void> fetchFood() async {
+    final List<dynamic>? foodNames = await FoodSearchDataChannel.getFoodNames();
+    if (foodNames != null) {
+      print(foodNames);
+      final List<dynamic>? foodImages =
+      await FoodSearchDataChannel.getFoodImages();
+      print(foodImages);
+      setState(() {
+        fetchedFoodNames = foodNames;
+        fetchedFoodImages = foodImages;
+        if (fetchedFoodNames != null) {
+          for (int i = 0; i < fetchedFoodNames!.length; i++) {
+            String foodName = fetchedFoodNames![i].toString().toUpperCase();
+            String foodImage = fetchedFoodImages![i].toString();
+            Map<String, String> foodMap = {
+              'name': foodName,
+              'image': foodImage,
+            };
+            foodListArr.add(foodMap);
+          }
+        }
+      });
+      print(foodListArr);
+    } else {
+      print('Failed to retrieve food data.');
+    }
   }
 
   // Method to filter the food list based on the search query
@@ -272,44 +137,25 @@ class _FoodSelectionScreenState extends State<FoodSelectionScreen> {
     setState(() {
       filteredFoodList = foodListArr
           .where((foodItem) =>
-              foodItem['name']!.toLowerCase().contains(query.toLowerCase()))
+          foodItem['name']!.toLowerCase().contains(query.toLowerCase()))
           .toList();
 
       // Reset pagination
       _currentPage = 0;
       // Reset the list
       _isLoading = false;
-      _loadMoreData(); // Load the first page of data
+      //_loadMoreData(); // Load the first page of data
     });
   }
 
-  // Method to load more data
-  void _loadMoreData() {
-    // If already loading or all data has been loaded, do not proceed
-    if (_isLoading || _currentPage * _pageSize >= filteredFoodList.length) {
-      return;
-    }
-
+  // Method to update foodName and foodWeight
+  Future<void> _updateFoodInfo(String name, String quantity)async {
     setState(() {
-      _isLoading = true;
-
-      // Calculate start and end index for the page
-      final startIndex = _currentPage * _pageSize;
-      final endIndex = startIndex + _pageSize;
-
-      // Add new items from the filtered list
-      final newItems = filteredFoodList.sublist(
-          startIndex, endIndex.clamp(0, filteredFoodList.length));
-
-      // Append the new items to the existing list
-      filteredFoodList.addAll(newItems);
-
-      // Update the current page index
-      _currentPage += 1;
-
-      // Set loading flag to false
-      _isLoading = false;
+      foodName = name.toLowerCase();
+      foodWeight = quantity.toLowerCase();
     });
+      String? status = await FoodSearchDataChannel.submitSelectedFoodData(foodName, foodWeight, widget.email, currentDate, widget.meal);
+      print(status);
   }
 
   @override
@@ -348,13 +194,18 @@ class _FoodSelectionScreenState extends State<FoodSelectionScreen> {
               onPressed: () {
                 // Handle "Add your own food" button click
               },
-              child: Text(
-                "Add your own food",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                ),
+              child: Column(
+                children: [
+                  Text(
+                    "Add your own food",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Text('$count foods selected'),
+                ],
               ),
             ),
           ),
@@ -372,22 +223,22 @@ class _FoodSelectionScreenState extends State<FoodSelectionScreen> {
               children: [
                 Expanded(
                     child: TextField(
-                  autocorrect: true,
-                  controller: searchController,
-                  onChanged: (query) {
-                    _filterFoodList(
-                        query); // Filter the food list based on the search query
-                  },
-                  decoration: InputDecoration(
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      prefixIcon: Image.asset(
-                        "assets/images/search.png",
-                        width: 25,
-                        height: 25,
-                      ),
-                      hintText: "Search Pancake"),
-                )),
+                      autocorrect: true,
+                      controller: searchController,
+                      onChanged: (query) {
+                        _filterFoodList(
+                            query); // Filter the food list based on the search query
+                      },
+                      decoration: InputDecoration(
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          prefixIcon: Image.asset(
+                            "assets/images/search.png",
+                            width: 25,
+                            height: 25,
+                          ),
+                          hintText: "Search Pancake"),
+                    )),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                   width: 1,
@@ -419,7 +270,7 @@ class _FoodSelectionScreenState extends State<FoodSelectionScreen> {
                   mObj: foodItem,
                   index: index,
                   onItemTapped: (item) {
-                    onItemTapped(context, item, _onSubmit);
+                    onItemTapped(context, item, _onSubmit,_incrementCountAndDbCall, _updateFoodInfo);
                   },
                 );
               },
@@ -432,7 +283,14 @@ class _FoodSelectionScreenState extends State<FoodSelectionScreen> {
                 child: CircularProgressIndicator(),
               ),
             ),
-          TextButton(onPressed: () {print(selectedFoodList);}, child: Text('submit')),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: RoundButton(
+                onPressed: () {
+                  MainTabView(email: widget.email);
+                },
+                title: 'Add to your ${widget.meal}'),
+          ),
         ],
       ),
     );

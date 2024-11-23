@@ -1,17 +1,24 @@
 import 'package:flutter/services.dart';
 
 class HomeDataChannel {
-
   static const MethodChannel _channel = MethodChannel('home_data_channel');
 
-  static Future<String?> getCurrentUser() async {
+  static Future<Map<dynamic, dynamic>?> getCurrentUser() async {
     try {
-      final String? username = await _channel.invokeMethod(
-          'getCurrentUser');
-      return username;
+      final Map<dynamic, dynamic>? userData =
+          await _channel.invokeMethod('getCurrentUser');
+      return userData;
     } on PlatformException catch (e) {
       print("Failed: '${e.message}'.");
       return null;
+    }
+  }
+
+  static Future<void> disableUser(String email) async {
+    try {
+      await _channel.invokeMethod('disableCurrentUser', {"email": email});
+    } on PlatformException catch (e) {
+      print("Failed: '${e.message}'.");
     }
   }
 }

@@ -1,7 +1,7 @@
 import 'package:calory/src/constants/image_strings.dart';
 import 'package:calory/src/features/authentication/screens/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});

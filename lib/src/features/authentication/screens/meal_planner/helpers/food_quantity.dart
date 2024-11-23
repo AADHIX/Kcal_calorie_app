@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Function to handle item selection and show an alert dialog with an input text field and toggle switch
-void onItemTapped(BuildContext context, Map<String, String> foodItem, Function(Map<String, dynamic>) onSubmit) {
+void onItemTapped(BuildContext context, Map<String, String> foodItem, Function(Map<String, dynamic>) onSubmit, Function() incrementCount, Function(String, String) updateFoodInfo) {
   // Create a TextEditingController to manage the input text field
   TextEditingController inputController = TextEditingController();
 
@@ -77,8 +76,11 @@ void onItemTapped(BuildContext context, Map<String, String> foodItem, Function(M
                           'quantity': foodQuantity,
                           'unit': selectedUnit,
                         });
-                      }
 
+                        // Update the food name and weight in FoodSelectionScreen
+                        updateFoodInfo(foodItem['name']!, foodQuantity);
+                      }
+                      incrementCount();
                       // Dismiss the alert dialog
                       Navigator.of(context).pop();
 

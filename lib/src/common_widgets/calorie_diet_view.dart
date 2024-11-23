@@ -1,31 +1,77 @@
+import 'package:calory/src/common/channels/dart_to_java_channels/calorie_diet_channel.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 import '../constants/colors.dart';
 
-class CalorieDietView extends StatelessWidget {
+class CalorieDietView extends StatefulWidget {
+  final String email;
+  final String date;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
-  const CalorieDietView(
-      {Key? key, this.animationController, this.animation})
-      : super(key: key);
+  const CalorieDietView({super.key, this.animationController, this.animation, required this.email, required this.date});
+
+  @override
+  State<CalorieDietView> createState() => _CalorieDietViewState();
+}
+
+
+class _CalorieDietViewState extends State<CalorieDietView> {
+
+  double consumedCal = 0.0;
+  double targetCal = 0.0;
+  double consumedCarbs = 0.0;
+  double consumedFat = 0.0;
+  double consumedProtein = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCalorieData();
+  }
+
+  Future<void> fetchCalorieData() async {
+    await fetchConsumed(); // Wait for fetchUser to complete
+  }
+
+  Future<void> fetchConsumed() async {
+    final Map<dynamic, dynamic>? userInfo = await CalorieDietDataChannel.getConsumedCalories(widget.date, widget.email);
+    if(userInfo != null){
+      final double calorie = userInfo['calorie'];
+      final double carbs = userInfo['carbs'];
+      final double fat = userInfo['fat'];
+      final double protein = userInfo['protein'];
+
+      setState(() {
+        consumedCal = calorie;
+        consumedCarbs = carbs;
+        consumedFat = fat;
+        consumedProtein = protein;
+      });
+    }else{
+      print('Failed to retrieve user data.');
+    }
+    double targetCalorie = await CalorieDietDataChannel.getTargetCalories(widget.email);
+    targetCalorie = targetCalorie.round().toDouble();
+    setState(() {
+      targetCal = targetCalorie;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    double consumedCalories = 3000.0;
-    double dailyCalorieGoal = 3000.0;
-
-    double remainingCalories = dailyCalorieGoal - consumedCalories;
-
+    double remainingCalories = targetCal - consumedCal;
+    fetchCalorieData();
+    remainingCalories = remainingCalories >= 0 ? remainingCalories:0.0;
     return AnimatedBuilder(
-      animation: animationController!,
+      animation: widget.animationController!,
       builder: (BuildContext context, Widget? child) {
         return FadeTransition(
-          opacity: animation!,
+          opacity: widget.animation!,
           child: new Transform(
             transform: new Matrix4.translationValues(
-                0.0, 30 * (1.0 - animation!.value), 0.0),
+                0.0, 30 * (1.0 - widget.animation!.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 16, bottom: 18),
@@ -109,7 +155,9 @@ class CalorieDietView extends StatelessWidget {
                                                   const EdgeInsets.only(
                                                       left: 4, bottom: 3),
                                                   child: Text(
-                                                    '${(1127 * animation!.value).toInt()}',
+                                                      consumedCal != 0
+                                                          ? '${(consumedCal * widget.animation!.value).toInt()}'
+                                                          : '$consumedCal',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontWeight:
@@ -199,7 +247,7 @@ class CalorieDietView extends StatelessWidget {
                                                   const EdgeInsets.only(
                                                       left: 4, bottom: 3),
                                                   child: Text(
-                                                    '${(102 * animation!.value).toInt()}',
+                                                    '0',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontWeight:
@@ -266,7 +314,7 @@ class CalorieDietView extends StatelessWidget {
                                         CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
-                                            '${(remainingCalories * animation!.value).toInt()}',
+                                            '${(remainingCalories * widget.animation!.value).toInt()}',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontWeight: FontWeight.normal,
@@ -299,8 +347,8 @@ class CalorieDietView extends StatelessWidget {
                                             HexColor("#8A98E8"),
                                             HexColor("#8A98E8")
                                           ],
-                                        consumedCalories: consumedCalories, // Pass consumed calories here
-                                        maxCalories: dailyCalorieGoal,
+                                        consumedCalories: consumedCal <= targetCal ? consumedCal:targetCal, // Pass consumed calories here
+                                        maxCalories: targetCal,
                                           ),
                                       child: SizedBox(
                                         width: 108,
@@ -360,7 +408,7 @@ class CalorieDietView extends StatelessWidget {
                                     child: Row(
                                       children: <Widget>[
                                         Container(
-                                          width: ((70 / 1.2) * animation!.value),
+                                          width: ((70 / 1.2) * widget.animation!.value),
                                           height: 4,
                                           decoration: BoxDecoration(
                                             gradient: LinearGradient(colors: [
@@ -379,13 +427,13 @@ class CalorieDietView extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 6),
                                   child: Text(
-                                    '12g left',
+                                    consumedCarbs.toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
                                       color:
-                                      Colors.grey.withOpacity(0.5),
+                                      Colors.black,
                                     ),
                                   ),
                                 ),
@@ -425,8 +473,8 @@ class CalorieDietView extends StatelessWidget {
                                         child: Row(
                                           children: <Widget>[
                                             Container(
-                                              width: ((70 / 2) *
-                                                  animationController!.value),
+                                              width: ((70 / 1) *
+                                                  widget.animationController!.value),
                                               height: 4,
                                               decoration: BoxDecoration(
                                                 gradient:
@@ -446,13 +494,12 @@ class CalorieDietView extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        '30g left',
+                                        consumedProtein.toString(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 12,
-                                          color: Colors.grey
-                                              .withOpacity(0.5),
+                                          color: Colors.black,
                                         ),
                                       ),
                                     ),
@@ -495,7 +542,7 @@ class CalorieDietView extends StatelessWidget {
                                           children: <Widget>[
                                             Container(
                                               width: ((70 / 2.5) *
-                                                  animationController!.value),
+                                                  widget.animationController!.value),
                                               height: 4,
                                               decoration: BoxDecoration(
                                                 gradient:
@@ -515,13 +562,12 @@ class CalorieDietView extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 6),
                                       child: Text(
-                                        '10g left',
+                                        consumedFat.toString(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 12,
-                                          color: Colors.grey
-                                              .withOpacity(0.5),
+                                          color: Colors.black,
                                         ),
                                       ),
                                     ),

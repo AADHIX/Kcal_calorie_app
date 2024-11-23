@@ -17,6 +17,7 @@ public class LoginDatabase extends SQLiteOpenHelper {
     // Table and columns names
     private static final String TABLE_NAME = "LoginData";
     private static final String COLUMN_USERNAME = "username";
+    private static final String COLUMN_EMAIL = "email";
     private static final String COLUMN_PASSWORD = "password";
     private static final String COLUMN_ACTIVE = "active";
 
@@ -28,7 +29,8 @@ public class LoginDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Create the table
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
-                COLUMN_USERNAME + " TEXT PRIMARY KEY NOT NULL, " +
+                COLUMN_EMAIL + " TEXT PRIMARY KEY NOT NULL, " +
+                COLUMN_USERNAME + " TEXT NOT NULL, " +
                 COLUMN_PASSWORD + " TEXT NOT NULL, " +
                 COLUMN_ACTIVE + " INTEGER NOT NULL" +
                 ")");
@@ -47,6 +49,7 @@ public class LoginDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         // Use the getters from the LoginModel class to retrieve the data
+        values.put(COLUMN_EMAIL, login.getLoginEmail());
         values.put(COLUMN_USERNAME, login.getLoginUsername());
         values.put(COLUMN_PASSWORD, login.getLoginPassword());
         values.put(COLUMN_ACTIVE, login.getActive() ? 1 : 0); // Store boolean as INTEGER
@@ -65,13 +68,13 @@ public class LoginDatabase extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             // Define the projection (which columns to retrieve)
-            String[] projection = {COLUMN_USERNAME, COLUMN_PASSWORD};
+            String[] projection = {COLUMN_EMAIL, COLUMN_PASSWORD};
 
             // Define the selection (WHERE clause)
-            String selection = COLUMN_USERNAME + " = ? AND " + COLUMN_PASSWORD + " = ?";
+            String selection = COLUMN_EMAIL + " = ? AND " + COLUMN_PASSWORD + " = ?";
 
             // Define the selection arguments
-            String[] selectionArgs = {login.getLoginUsername(), login.getLoginPassword()};
+            String[] selectionArgs = {login.getLoginEmail(), login.getLoginPassword()};
 
             // Query the database
             cursor = db.query(
@@ -107,8 +110,8 @@ public class LoginDatabase extends SQLiteOpenHelper {
         values.put(COLUMN_ACTIVE, login.getActive() ? 1 : 0); // Store boolean as INTEGER
 
         // Define the WHERE clause
-        String selection = COLUMN_USERNAME + " = ?";
-        String[] selectionArgs = { login.getLoginUsername() };
+        String selection = COLUMN_EMAIL + " = ?";
+        String[] selectionArgs = { login.getLoginEmail() };
 
         // Update the active status in the database
         db.update(TABLE_NAME, values, selection, selectionArgs);
@@ -119,13 +122,13 @@ public class LoginDatabase extends SQLiteOpenHelper {
 
 
     // Method to retrieve the username of the current user (active user)
-    public String getCurrentUser() {
+    public LoginModel getCurrentUser() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
-        String username = null;
+        LoginModel loginModel = new LoginModel();
         try {
             // Define the projection (which columns to retrieve)
-            String[] projection = {COLUMN_USERNAME};
+            String[] projection = {COLUMN_USERNAME, COLUMN_EMAIL};
 
             // Define the selection (WHERE clause)
             String selection = COLUMN_ACTIVE + " = ?";
@@ -146,8 +149,9 @@ public class LoginDatabase extends SQLiteOpenHelper {
 
             // Check if the cursor contains any rows
             if (cursor != null && cursor.moveToFirst()) {
-                // Retrieve the username from the cursor
-                username = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USERNAME));
+                // Retrieve the username and email from the cursor
+                loginModel.setLoginUsername(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USERNAME)));
+                loginModel.setLoginEmail(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL)));
             }
         } finally {
             // Close the cursor and database
@@ -156,6 +160,7 @@ public class LoginDatabase extends SQLiteOpenHelper {
             }
             db.close();
         }
-        return username; // Return the username of the current user (active user)
+        return loginModel; // Return the username and email of the current user (active user)
     }
+
 }

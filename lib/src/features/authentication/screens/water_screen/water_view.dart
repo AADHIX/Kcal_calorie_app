@@ -1,13 +1,16 @@
 import 'package:bounce/bounce.dart';
+import 'package:calory/src/common/channels/dart_to_java_channels/water_view_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../common_widgets/wave_view.dart';
 
 class WaterView extends StatefulWidget {
+  final String email;
   const WaterView(
       {super.key,
       this.mainScreenAnimationController,
-      this.mainScreenAnimation});
+      this.mainScreenAnimation,
+      required this.email});
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
@@ -16,14 +19,45 @@ class WaterView extends StatefulWidget {
   _WaterViewState createState() => _WaterViewState();
 }
 
+
 class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
-  double waterPercentage = 0.0;
-  double waterMLiter = 0.0;
-  String formattedTime = '--';
+  late double waterPercentage = 0.0;
+  late double waterMLiter = 0.0;
+  late String formattedTime = '--';
+  late String currentDate;
 
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    fetchUserInfo();
+  }
+
+  Future<void> fetchUserInfo() async {
+    final Map<dynamic, dynamic>? userInfo =
+    await WaterViewDataChannel.getWaterUserInfo(widget.email, currentDate);
+    if(userInfo != null){
+      final double waterLvl = userInfo['water_level'];
+      final double waterPrc = userInfo['water_percentage'];
+      final String waterTym = userInfo['water_time'];
+
+      setState(() {
+        waterMLiter = waterLvl;
+        waterPercentage = waterPrc;
+        formattedTime = waterTym;
+        print(waterMLiter);
+        print(waterPercentage);
+        print(formattedTime);
+      });
+    }else{
+      print('Failed to retrieve user data.');
+    }
   }
 
   @override
@@ -236,6 +270,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                               100.0; // Cap at 100%
                                           waterMLiter = 4000;
                                         }
+                                        WaterViewDataChannel.setWaterInfo(widget.email, currentDate,waterMLiter,waterPercentage,formattedTime);
                                       });
                                     },
                                     child: const Icon(
@@ -275,6 +310,7 @@ class _WaterViewState extends State<WaterView> with TickerProviderStateMixin {
                                           waterPercentage = 0.0; // Cap at 0%
                                           waterMLiter = 0;
                                         }
+                                        WaterViewDataChannel.setWaterInfo(widget.email, currentDate,waterMLiter,waterPercentage,formattedTime);
                                       });
                                     },
                                     child: const Icon(

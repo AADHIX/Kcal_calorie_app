@@ -1,11 +1,9 @@
-package com.cec.mini.calory.constants;
+package com.cec.mini.calory.helper;
 
 import android.content.Context;
 
 import com.cec.mini.calory.models.LoginModel;
-import com.cec.mini.calory.models.SignUpModel;
 import com.cec.mini.calory.nutrition.LoginDatabase;
-import com.cec.mini.calory.nutrition.SignUpDatabase;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -26,18 +24,18 @@ public class LoginDataHandler implements MethodChannel.MethodCallHandler {
     public void onMethodCall(MethodCall call, MethodChannel.Result result) {
         if (call.method.equals("submitLoginData")) {
             // Retrieve data from the method call
-            String username = call.argument("username");
+            String email = call.argument("email");
             String password = call.argument("password");
 
             // Create a SignUpModel instance and use the setter methods to set the data
             LoginModel loginModel = new LoginModel();
-            loginModel.setLoginUsername(username);
+            loginModel.setLoginEmail(email);
             loginModel.setLoginPassword(password);
 
             isTrue = loginDb.authenticateUser(loginModel);
 
             if (isTrue) {
-                loginModel.setLoginUsername(username);
+                loginModel.setLoginEmail(email);
                 loginModel.setActive(true);
                 loginDb.updateActiveStatus(loginModel);
                 System.out.println("User can enter");

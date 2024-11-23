@@ -11,7 +11,15 @@ import 'helpers/height_picker.dart';
 import 'helpers/weight_picker.dart';
 
 class GetProfileScreen extends StatefulWidget {
-  const GetProfileScreen({super.key});
+  final String username;
+  final String email;
+  final String password;
+
+  const GetProfileScreen(
+      {super.key,
+      required this.username,
+      required this.password,
+      required this.email});
 
   @override
   State<GetProfileScreen> createState() => _GetProfileScreen();
@@ -239,15 +247,27 @@ class _GetProfileScreen extends State<GetProfileScreen> {
                             ),
                             onPressed: isButtonEnabled
                                 ? () {
-                              selectedGender = txtGender.text;
-                              selectedAge = int.parse(txtAge.text);
-                              selectedWeight = double.parse(txtWeight.text);
-                              selectedHeight = double.parse(txtHeight.text);
+                                    selectedGender = txtGender.text;
+                                    selectedAge = int.parse(txtAge.text);
+                                    selectedWeight =
+                                        double.parse(txtWeight.text);
+                                    selectedHeight =
+                                        double.parse(txtHeight.text);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                               ActivityLevelScreen(selectedGender: selectedGender, selectedAge: selectedAge, selectedWeight: selectedWeight, selectedHeight: selectedHeight)),
+                                              ActivityLevelScreen(
+                                                  selectedGender:
+                                                      selectedGender,
+                                                  selectedAge: selectedAge,
+                                                  selectedWeight:
+                                                      selectedWeight,
+                                                  selectedHeight:
+                                                      selectedHeight,
+                                                  email: widget.email,
+                                                  password: widget.password,
+                                                  username: widget.username)),
                                     );
                                   }
                                 : null,

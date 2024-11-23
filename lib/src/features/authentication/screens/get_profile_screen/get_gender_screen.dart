@@ -1,28 +1,61 @@
-import 'package:animated_weight_picker/animated_weight_picker.dart';
+
+import 'package:calory/src/features/authentication/screens/get_profile_screen/helpers/height_helper.dart';
+import 'package:calory/src/features/authentication/screens/login_screen/login_screen.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
-
+import '../../../../common/channels/dart_to_java_channels/signUp_channel.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/image_strings.dart';
 import '../../../../constants/text_string.dart';
+import '../get_activity_level_screen/helpers/calculate_bmr.dart';
+import 'helpers/weight_helper.dart';
 
 class GetGenderScreen extends StatefulWidget {
-  const GetGenderScreen({super.key});
+  final String username;
+  final String email;
+  final String password;
+
+  const GetGenderScreen(
+      {super.key,
+      required this.username,
+      required this.password,
+      required this.email});
 
   @override
   State<GetGenderScreen> createState() => _GetGenderScreenState();
 }
 
 class _GetGenderScreenState extends State<GetGenderScreen> {
-  late double _selectedWeight;
-  late double _selectedHeight;
+  List<Map<String, dynamic>> activeArr = [
+    {
+      "image": sedentary,
+      "title": sedentaryTitle,
+      "subtitle": sedentarySubTitle
+    },
+    {
+      "image": lightlyActive,
+      "title": lightlyTitle,
+      "subtitle": lightlySubTitle
+    },
+    {
+      "image": moderately,
+      "title": moderatelyTitle,
+      "subtitle": moderatelySubTitle
+    },
+    {"image": veryActive, "title": veryTitle, "subtitle": verySubTitle},
+    {"image": extraActive, "title": extraTitle, "subtitle": extraSubTitle},
+  ];
 
+  late String selectedTitle = activeArr[0]["title"];
+
+  late double selectedWeight;
   late String selectedGender;
   late int selectedAge;
+  late double selectedHeight;
 
   double dailyCalorieIntake = 0.0;
 
@@ -55,32 +88,45 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
     });
   }
 
-  void _resetProgress() {
-    setState(() {
-      _progress = 0.0;
-    });
-  }
 
   void _goToNextPage() {
-    setState(() {
-      if (_currentPageIndex < 4) {
-        if (_currentPageIndex == 1) {
-          _calculateAgeAndPrint(_selectedDate); // Print age on step 2
-        }
-        _currentPageIndex++;
-        _completeProgress();
-        _showMaleFemale = false;
-        _showGenderText = false;
-        if (_currentPageIndex == 4) {
-          _showActivityText = true;
-        }
-        if (_currentPageIndex == 1) {
-          _showDatePicker = true;
-        } else {
-          _showDatePicker = false;
-        }
+    if (_currentPageIndex < 4) {
+      if (_currentPageIndex == 1) {
+        _calculateAgeAndPrint(_selectedDate); // Print age on step 2
       }
-    });
+      _currentPageIndex++;
+      _completeProgress();
+      _showMaleFemale = false;
+      _showGenderText = false;
+      if (_currentPageIndex == 4) {
+        _showActivityText = true;
+      }
+      if (_currentPageIndex == 1) {
+        _showDatePicker = true;
+      } else {
+        _showDatePicker = false;
+      }
+    } else if (_currentPageIndex == 4) {
+      double bmr = CalculateBMR.calculateBMR(
+          selectedWeight, selectedHeight, selectedAge, selectedGender);
+      dailyCalorieIntake =
+          CalculateBMR().calculateDailyCalorieIntake(bmr, selectedTitle);
+      SignUpDataChannel.submitSignUpData(
+          widget.username,
+          widget.email,
+          widget.password,
+          selectedGender,
+          selectedAge,
+          selectedWeight,
+          selectedHeight,
+          selectedTitle,
+          dailyCalorieIntake);
+      //submitSignUpData;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    }
   }
 
   void _calculateAgeAndPrint(DateTime birthDate) {
@@ -93,14 +139,12 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
     }
     selectedGender = _isMaleSelected ? 'Male' : 'Female';
     selectedAge = age;
-    print(' ${_isMaleSelected ? 'male' : 'female'}');
-    print(' $age');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('')),
+      appBar: AppBar(title: const Text('')),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -162,7 +206,7 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(width: 20),
+                                    const SizedBox(width: 20),
                                     GestureDetector(
                                       onTap: () {
                                         setState(() {
@@ -194,10 +238,10 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 20),
+                               const SizedBox(height: 20),
                                 if (_showGenderText)
-                                  Padding(
-                                    padding: const EdgeInsets.only(
+                                  const Padding(
+                                    padding:  EdgeInsets.only(
                                         left: 20, top: 200),
                                     child: Column(
                                       crossAxisAlignment:
@@ -229,7 +273,7 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(
+                               const  Text(
                                   'What is your age?',
                                   style: TextStyle(
                                     color: Colors.black,
@@ -237,7 +281,7 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(height: 50),
+                                const SizedBox(height: 50),
                                 SizedBox(
                                   width: 500,
                                   height: 250,
@@ -261,10 +305,10 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                                 _currentPageIndex == 1, // Only show on Step 2
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  left: 100, top: 50, bottom: 180),
+                                  left: 180, top: 50, bottom: 180),
                               child: Text(
                                 ' ${DateFormat('yyyy MMM dd').format(_selectedDate)}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 30,
                                   fontWeight: FontWeight.bold,
@@ -273,8 +317,18 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                             ),
                           ),
                         ),
-                        if (_currentPageIndex == 2) _buildScreen2(),
-                        if (_currentPageIndex == 3) _buildScreen3(),
+                        if (_currentPageIndex == 2)
+                          BuildScreen2(
+                            onWeightSelected: (weight) {
+                                selectedWeight = double.parse(weight.toString());
+                            },
+                          ),
+                        if (_currentPageIndex == 3)
+                          BuildScreen3(
+                            onHeightSelected: (height) {
+                              selectedHeight = double.parse(height.toString());
+                            },
+                          ),
                         if (_currentPageIndex == 4) _buildScreen4(),
                       ],
                     ),
@@ -291,9 +345,9 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Colors.black, // Change button color to black
-                            minimumSize: Size(350, 80), // Set button size
+                            minimumSize: const Size(350, 80), // Set button size
                           ),
-                          child: Text(
+                          child: const Text(
                             'Next',
                             style: TextStyle(
                               color: Colors.white, // Change text color to white
@@ -310,8 +364,8 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           'Step ${_currentPageIndex + 1} / 5',
-                          style: TextStyle(
-                            color: const Color.fromARGB(255, 112, 109, 109),
+                          style: const TextStyle(
+                            color:  Color.fromARGB(255, 112, 109, 109),
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
@@ -327,7 +381,7 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                       // Adjust the bottom position
                       child: Visibility(
                         visible: _showGenderText,
-                        child: Column(
+                        child: const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -359,7 +413,7 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                       // Adjust the bottom position
                       child: Visibility(
                         visible: _showActivityText,
-                        child: Column(
+                        child: const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -375,11 +429,11 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                       ),
                     ),
                     Positioned(
-                      left: 100,
-                      bottom: 350,
+                      left: 160,
+                      bottom: 450,
                       child: Visibility(
                         visible: _showMaleFemale,
-                        child: Text(
+                        child: const Text(
                           'Male',
                           style: TextStyle(
                             color: Colors.black,
@@ -390,11 +444,11 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                       ),
                     ),
                     Positioned(
-                      right: 100,
-                      bottom: 350,
+                      right: 160,
+                      bottom: 450,
                       child: Visibility(
                         visible: _showMaleFemale,
-                        child: Text(
+                        child: const Text(
                           'Female',
                           style: TextStyle(
                             color: Colors.black,
@@ -414,93 +468,8 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
     );
   }
 
-  Widget _buildScreen2() {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Select your weight',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 32.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(
-            height: 150,
-          ),
-          AnimatedWeightPicker(
-            min: 30,
-            max: 200,
-            onChange: (value) {
-              setState(() {
-                _selectedWeight = double.parse(value);
-              });
-            },
-          ),
-          // Add your widgets for screen 2 here
-        ],
-      ),
-    );
-  }
-
-  Widget _buildScreen3() {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Select your height',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 32.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(
-            height: 150,
-          ),
-          AnimatedWeightPicker(
-            suffixText: 'cm',
-            min: 100,
-            max: 250,
-            onChange: (value) {
-              setState(() {
-                _selectedHeight = double.parse(value);
-              });
-            },
-          ),
-          // Add your widgets for screen 3 here
-        ],
-      ),
-    );
-  }
-
   Widget _buildScreen4() {
     CarouselController buttonCarouselController = CarouselController();
-
-    List<Map<String, dynamic>> activeArr = [
-      {
-        "image": splashImage,
-        "title": sedentaryTitle,
-        "subtitle": sedentarySubTitle
-      },
-      {
-        "image": splashImage,
-        "title": lightlyTitle,
-        "subtitle": lightlySubTitle
-      },
-      {
-        "image": splashImage,
-        "title": moderatelyTitle,
-        "subtitle": moderatelySubTitle
-      },
-      {"image": splashImage, "title": veryTitle, "subtitle": verySubTitle},
-      {"image": splashImage, "title": extraTitle, "subtitle": extraSubTitle},
-    ];
-
-    late String selectedTitle = activeArr[0]["title"];
 
     var media = MediaQuery.of(context).size;
 
@@ -512,7 +481,7 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                 .map(
                   (gObj) => Container(
                     decoration: BoxDecoration(
-                      color: Colors.green,
+                      color: const Color.fromARGB(255, 247, 200, 29),
                       borderRadius: BorderRadius.circular(25),
                     ),
                     padding: EdgeInsets.symmetric(
@@ -557,7 +526,7 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                 .toList(),
             carouselController: buttonCarouselController,
             options: CarouselOptions(
-              height: 475,
+              height: 650,
               autoPlay: false,
               enlargeCenterPage: true,
               viewportFraction: 0.7,
@@ -579,24 +548,24 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
     String text = 'Step ${(value * 5).toStringAsFixed(0)} of 5 Completed';
     return Column(
       children: [
-        SizedBox(height: 25.0),
+        const SizedBox(height: 25.0),
         ClipRRect(
           borderRadius: BorderRadius.circular(15.0),
           child: LinearProgressIndicator(
             value: value,
             minHeight: 10.0,
             backgroundColor: Colors.black,
-            valueColor: AlwaysStoppedAnimation<Color>(
+            valueColor: const AlwaysStoppedAnimation<Color>(
               Color.fromARGB(255, 209, 71, 12),
             ),
           ),
         ),
-        SizedBox(height: 25.0),
+        const SizedBox(height: 25.0),
         Text(
           text,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
-        SizedBox(height: 25.0),
+        const SizedBox(height: 25.0),
       ],
     );
   }
