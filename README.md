@@ -158,6 +158,8 @@ The app maintains a comprehensive nutritional database with:
 ## 📱 Records
 
 -**SignUp**
+
+
 ![kcal-signup-ezgif com-optimize](https://github.com/user-attachments/assets/3d6980e7-94a2-465a-bc4a-5bd2f821d2d3)
 
 
