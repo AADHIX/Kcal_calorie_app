@@ -158,7 +158,7 @@ The app maintains a comprehensive nutritional database with:
 ## 📱 Records
 
 -**SignUp**
-https://github.com/user-attachments/assets/29c06d48-1712-483c-b52f-1aec0c7cc949
+![kcal-signup-ezgif com-optimize](https://github.com/user-attachments/assets/3d6980e7-94a2-465a-bc4a-5bd2f821d2d3)
 
 
 ## 🛠️ Technical Implementation
