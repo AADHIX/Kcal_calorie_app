@@ -163,7 +163,7 @@ The app maintains a comprehensive nutritional database with:
 ![kcal-signup-ezgif com-optimize](https://github.com/user-attachments/assets/3d6980e7-94a2-465a-bc4a-5bd2f821d2d3)
 
 
--**Food Recognition using Tensorflow Lite**
+-**Food Recognition using TensorFlow Lite**
 
 
 ![kcal-food-recog](https://github.com/user-attachments/assets/b1c7d013-e710-480b-b83d-07e377d47036)
