@@ -175,6 +175,8 @@ The app maintains a comprehensive nutritional database with:
 ![kcal-features](https://github.com/user-attachments/assets/1bb90bee-50f7-4113-80a6-69d6dbc2a46f)
 
 
+
+
 ## 🛠️ Technical Implementation
 
 ### Platform Channels
