@@ -169,6 +169,10 @@ The app maintains a comprehensive nutritional database with:
 ![kcal-food-recog](https://github.com/user-attachments/assets/b1c7d013-e710-480b-b83d-07e377d47036)
 
 
+-**Features**
+
+
+
 
 ## 🛠️ Technical Implementation
 
