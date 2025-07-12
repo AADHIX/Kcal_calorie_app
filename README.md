@@ -267,8 +267,8 @@ This project's dashboard design was inspired by the excellent work from:
 
 ## 📞 Contact
 
-- **Project Link**: [https://github.com/yourusername/kcal](https://github.com/yourusername/kcal)
-- **Email**: your.email@example.com
+- **Project Link**: [Kcal](https://github.com/gokulg14/Kcal)
+- **Email**: gokulgnair777@gmail.com
 
 ---
 
