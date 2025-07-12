@@ -155,14 +155,11 @@ The app maintains a comprehensive nutritional database with:
 - **Food Selection**: Search and add foods to meal plans
 - **Scheduling**: Plan meals for specific dates
 
-## 📱 Screenshots
+## 📱 Records
 
-<div align="center">
-  <img src="assets/images/splash-screen.gif" alt="Splash Screen" width="200"/>
-  <img src="assets/images/home-screen.png" alt="Home Screen" width="200"/>
-  <img src="assets/images/scan-food.png" alt="Food Scanning" width="200"/>
-  <img src="assets/images/meal-planning.png" alt="Meal Planning" width="200"/>
-</div>
+-**SignUp**
+https://github.com/user-attachments/assets/29c06d48-1712-483c-b52f-1aec0c7cc949
+
 
 ## 🛠️ Technical Implementation
 
