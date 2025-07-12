@@ -157,6 +157,10 @@ The app maintains a comprehensive nutritional database with:
 
 ## 📱 Records
 
+
+![WhatsApp Image 2025-07-13 at 12 25 39 AM](https://github.com/user-attachments/assets/ceb3d364-3734-4b9e-aae1-7067245ffea0)
+
+
 -**SignUp**
 
 
