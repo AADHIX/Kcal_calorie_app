@@ -172,7 +172,7 @@ The app maintains a comprehensive nutritional database with:
 -**Features**
 
 
-https://github.com/gokulg14/Kcal/issues/1#issue-3225672106
+![kcal-features](https://github.com/user-attachments/assets/1bb90bee-50f7-4113-80a6-69d6dbc2a46f)
 
 
 ## 🛠️ Technical Implementation
