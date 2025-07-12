@@ -1,4 +1,4 @@
-# kcal - Food Recognition & Calorie Estimation App
+# Kcal - Food Recognition & Calorie Estimation App
 
 <div align="center">
   <img src="assets/logo/Group 83.png" alt="kcal Logo" width="200"/>
@@ -11,7 +11,7 @@
 
 ## 📱 Overview
 
-**kcal** is an intelligent Flutter application that combines computer vision with nutrition tracking to help users maintain a healthy lifestyle. The app uses a pre-trained TensorFlow Lite model to recognize food items through the camera and provides detailed nutritional information including calories, proteins, fats, and carbohydrates.
+**Kcal** is an intelligent Flutter application that combines computer vision with nutrition tracking to help users maintain a healthy lifestyle. The app uses a pre-trained TensorFlow Lite model to recognize food items through the camera and provides detailed nutritional information including calories, proteins, fats, and carbohydrates.
 
 ### 🎯 Key Features
 
