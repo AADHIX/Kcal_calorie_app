@@ -255,7 +255,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### 🎨 UI/UX Inspiration
 This project's dashboard design was inspired by the excellent work from:
-- **[Best-Flutter-UI-Templates](https://github.com/mitesh77/Best-Flutter-UI-Templates?tab=readme-ov-file)** by [Mitesh Chodvadiya]
+- **[Best-Flutter-UI-Templates](https://github.com/mitesh77/Best-Flutter-UI-Templates?tab=readme-ov-file)** by [Mitesh Chodvadiya](https://github.com/mitesh77)
   - The dashboard layout and progress bars served as inspiration for this project
   - Special thanks for the creative UI patterns and user flow concepts
 
