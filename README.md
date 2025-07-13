@@ -6,7 +6,6 @@
   [![Flutter](https://img.shields.io/badge/Flutter-3.3.0+-blue.svg)](https://flutter.dev/)
   [![Android](https://img.shields.io/badge/Android-API%2021+-green.svg)](https://developer.android.com/)
   [![TensorFlow Lite](https://img.shields.io/badge/TensorFlow%20Lite-2.0+-orange.svg)](https://www.tensorflow.org/lite)
-  [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 </div>
 
 ## 📱 Overview
