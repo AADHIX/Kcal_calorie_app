@@ -284,8 +284,8 @@ This project's dashboard design was inspired by the excellent work from:
 
 ## 📞 Contact
 
-- **Project Link**: [Kcal](https://github.com/gokulg14/Kcal)
-- **Email**: gokulgnair777@gmail.com
+
+- **Email**: aadhiadarsh192001@gmail.com
 
 ---
 
