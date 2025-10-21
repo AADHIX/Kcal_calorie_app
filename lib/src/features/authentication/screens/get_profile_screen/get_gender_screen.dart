@@ -1,9 +1,6 @@
-
 import 'package:calory/src/features/authentication/screens/get_profile_screen/helpers/height_helper.dart';
 import 'package:calory/src/features/authentication/screens/login_screen/login_screen.dart';
-import 'package:carousel_slider/carousel_controller.dart';
-import 'package:carousel_slider/carousel_options.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as carousel_slider;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
@@ -19,11 +16,12 @@ class GetGenderScreen extends StatefulWidget {
   final String email;
   final String password;
 
-  const GetGenderScreen(
-      {super.key,
-      required this.username,
-      required this.password,
-      required this.email});
+  const GetGenderScreen({
+    super.key,
+    required this.username,
+    required this.password,
+    required this.email,
+  });
 
   @override
   State<GetGenderScreen> createState() => _GetGenderScreenState();
@@ -34,20 +32,28 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
     {
       "image": sedentary,
       "title": sedentaryTitle,
-      "subtitle": sedentarySubTitle
+      "subtitle": sedentarySubTitle,
     },
     {
       "image": lightlyActive,
       "title": lightlyTitle,
-      "subtitle": lightlySubTitle
+      "subtitle": lightlySubTitle,
     },
     {
       "image": moderately,
       "title": moderatelyTitle,
-      "subtitle": moderatelySubTitle
+      "subtitle": moderatelySubTitle,
     },
-    {"image": veryActive, "title": veryTitle, "subtitle": verySubTitle},
-    {"image": extraActive, "title": extraTitle, "subtitle": extraSubTitle},
+    {
+      "image": veryActive,
+      "title": veryTitle,
+      "subtitle": verySubTitle,
+    },
+    {
+      "image": extraActive,
+      "title": extraTitle,
+      "subtitle": extraSubTitle,
+    },
   ];
 
   late String selectedTitle = activeArr[0]["title"];
@@ -88,7 +94,6 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
     });
   }
 
-
   void _goToNextPage() {
     if (_currentPageIndex < 4) {
       if (_currentPageIndex == 1) {
@@ -108,20 +113,24 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
       }
     } else if (_currentPageIndex == 4) {
       double bmr = CalculateBMR.calculateBMR(
-          selectedWeight, selectedHeight, selectedAge, selectedGender);
+        selectedWeight,
+        selectedHeight,
+        selectedAge,
+        selectedGender,
+      );
       dailyCalorieIntake =
           CalculateBMR().calculateDailyCalorieIntake(bmr, selectedTitle);
       SignUpDataChannel.submitSignUpData(
-          widget.username,
-          widget.email,
-          widget.password,
-          selectedGender,
-          selectedAge,
-          selectedWeight,
-          selectedHeight,
-          selectedTitle,
-          dailyCalorieIntake);
-      //submitSignUpData;
+        widget.username,
+        widget.email,
+        widget.password,
+        selectedGender,
+        selectedAge,
+        selectedWeight,
+        selectedHeight,
+        selectedTitle,
+        dailyCalorieIntake,
+      );
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -168,8 +177,7 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                           child: _stepIndicator(_progress, _isMaleSelected),
                         ),
                         Visibility(
-                          visible: _currentPageIndex ==
-                              0, // Show only on the first page
+                          visible: _currentPageIndex == 0,
                           child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -238,11 +246,11 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                                     ),
                                   ],
                                 ),
-                               const SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 if (_showGenderText)
                                   const Padding(
-                                    padding:  EdgeInsets.only(
-                                        left: 20, top: 200),
+                                    padding:
+                                        EdgeInsets.only(left: 20, top: 200),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -273,7 +281,7 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                               const  Text(
+                                const Text(
                                   'What is your age?',
                                   style: TextStyle(
                                     color: Colors.black,
@@ -301,8 +309,7 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                         Align(
                           alignment: Alignment.bottomLeft,
                           child: Visibility(
-                            visible:
-                                _currentPageIndex == 1, // Only show on Step 2
+                            visible: _currentPageIndex == 1,
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 180, top: 50, bottom: 180),
@@ -320,7 +327,7 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                         if (_currentPageIndex == 2)
                           BuildScreen2(
                             onWeightSelected: (weight) {
-                                selectedWeight = double.parse(weight.toString());
+                              selectedWeight = double.parse(weight.toString());
                             },
                           ),
                         if (_currentPageIndex == 3)
@@ -335,22 +342,21 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                     Positioned(
                       left: 0,
                       right: 0,
-                      bottom: 20, // Set the distance from the bottom
+                      bottom: 20,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: ElevatedButton(
                           onPressed: () {
-                            _goToNextPage(); // Go to the next page
+                            _goToNextPage();
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Colors.black, // Change button color to black
-                            minimumSize: const Size(350, 80), // Set button size
+                            backgroundColor: Colors.black,
+                            minimumSize: const Size(350, 80),
                           ),
                           child: const Text(
                             'Next',
                             style: TextStyle(
-                              color: Colors.white, // Change text color to white
+                              color: Colors.white,
                               fontSize: 18,
                             ),
                           ),
@@ -358,14 +364,14 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                       ),
                     ),
                     Positioned(
-                      left: 0, // Adjust the left position
-                      top: 0, // Adjust the top position
+                      left: 0,
+                      top: 0,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           'Step ${_currentPageIndex + 1} / 5',
                           style: const TextStyle(
-                            color:  Color.fromARGB(255, 112, 109, 109),
+                            color: Color.fromARGB(255, 112, 109, 109),
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
@@ -375,10 +381,8 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                     Positioned(
                       left: 40,
                       right: 0,
-                      // Adjust the left position
                       bottom: 400,
                       top: 70,
-                      // Adjust the bottom position
                       child: Visibility(
                         visible: _showGenderText,
                         child: const Column(
@@ -407,10 +411,8 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                     Positioned(
                       left: 80,
                       right: 0,
-                      // Adjust the left position
                       bottom: 400,
                       top: 70,
-                      // Adjust the bottom position
                       child: Visibility(
                         visible: _showActivityText,
                         child: const Column(
@@ -469,14 +471,15 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
   }
 
   Widget _buildScreen4() {
-    CarouselController buttonCarouselController = CarouselController();
+    carousel_slider.CarouselController buttonCarouselController =
+        carousel_slider.CarouselController();
 
     var media = MediaQuery.of(context).size;
 
     return Stack(
       children: [
         Center(
-          child: CarouselSlider(
+          child: carousel_slider.CarouselSlider(
             items: activeArr
                 .map(
                   (gObj) => Container(
@@ -525,7 +528,7 @@ class _GetGenderScreenState extends State<GetGenderScreen> {
                 )
                 .toList(),
             carouselController: buttonCarouselController,
-            options: CarouselOptions(
+            options: carousel_slider.CarouselOptions(
               height: 650,
               autoPlay: false,
               enlargeCenterPage: true,

@@ -1,7 +1,7 @@
 import 'package:calory/src/features/authentication/screens/get_activity_level_screen/helpers/calculate_bmr.dart';
 import 'package:calory/src/features/authentication/screens/login_screen/login_screen.dart';
 import 'package:calory/src/features/authentication/screens/main_tab/main_tab_view.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as carousel_slider;
 import 'package:flutter/material.dart';
 import '../../../../common/channels/dart_to_java_channels/signUp_channel.dart';
 import '../../../../common_widgets/round_button.dart';
@@ -18,22 +18,24 @@ class ActivityLevelScreen extends StatefulWidget {
   final double selectedHeight;
   final double selectedWeight;
 
-  const ActivityLevelScreen(
-      {super.key,
-      required this.selectedGender,
-      required this.selectedAge,
-      required this.selectedWeight,
-      required this.selectedHeight,
-      required this.username,
-      required this.password,
-      required this.email});
+  const ActivityLevelScreen({
+    super.key,
+    required this.selectedGender,
+    required this.selectedAge,
+    required this.selectedWeight,
+    required this.selectedHeight,
+    required this.username,
+    required this.password,
+    required this.email,
+  });
 
   @override
   State<ActivityLevelScreen> createState() => _ActivityLevelScreenState();
 }
 
 class _ActivityLevelScreenState extends State<ActivityLevelScreen> {
-  CarouselController buttonCarouselController = CarouselController();
+  carousel_slider.CarouselController buttonCarouselController =
+      carousel_slider.CarouselController();
   late String selectedTitle = activeArr[0]["title"];
   double dailyCalorieIntake = 0.0;
 
@@ -41,16 +43,28 @@ class _ActivityLevelScreenState extends State<ActivityLevelScreen> {
     {
       "image": splashImage,
       "title": sedentaryTitle,
-      "subtitle": sedentarySubTitle
+      "subtitle": sedentarySubTitle,
     },
-    {"image": splashImage, "title": lightlyTitle, "subtitle": lightlySubTitle},
+    {
+      "image": splashImage,
+      "title": lightlyTitle,
+      "subtitle": lightlySubTitle,
+    },
     {
       "image": splashImage,
       "title": moderatelyTitle,
-      "subtitle": moderatelySubTitle
+      "subtitle": moderatelySubTitle,
     },
-    {"image": splashImage, "title": veryTitle, "subtitle": verySubTitle},
-    {"image": splashImage, "title": extraTitle, "subtitle": extraSubTitle},
+    {
+      "image": splashImage,
+      "title": veryTitle,
+      "subtitle": verySubTitle,
+    },
+    {
+      "image": splashImage,
+      "title": extraTitle,
+      "subtitle": extraSubTitle,
+    },
   ];
 
   @override
@@ -62,19 +76,22 @@ class _ActivityLevelScreenState extends State<ActivityLevelScreen> {
         child: Stack(
           children: [
             Center(
-              child: CarouselSlider(
+              child: carousel_slider.CarouselSlider(
                 items: activeArr
                     .map(
                       (gObj) => Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                              colors: TColor.primaryG,
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight),
+                            colors: TColor.primaryG,
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                           borderRadius: BorderRadius.circular(25),
                         ),
                         padding: EdgeInsets.symmetric(
-                            vertical: media.width * 0.1, horizontal: 25),
+                          vertical: media.width * 0.1,
+                          horizontal: 25,
+                        ),
                         alignment: Alignment.center,
                         child: FittedBox(
                           child: Column(
@@ -90,9 +107,10 @@ class _ActivityLevelScreenState extends State<ActivityLevelScreen> {
                               Text(
                                 gObj["title"].toString(),
                                 style: TextStyle(
-                                    color: TColor.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700),
+                                  color: TColor.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                               Container(
                                 width: media.width * 0.1,
@@ -106,7 +124,9 @@ class _ActivityLevelScreenState extends State<ActivityLevelScreen> {
                                 gObj["subtitle"].toString(),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    color: TColor.white, fontSize: 12),
+                                  color: TColor.white,
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ),
@@ -115,7 +135,7 @@ class _ActivityLevelScreenState extends State<ActivityLevelScreen> {
                     )
                     .toList(),
                 carouselController: buttonCarouselController,
-                options: CarouselOptions(
+                options: carousel_slider.CarouselOptions(
                   autoPlay: false,
                   enlargeCenterPage: true,
                   viewportFraction: 0.7,
@@ -140,14 +160,18 @@ class _ActivityLevelScreenState extends State<ActivityLevelScreen> {
                   Text(
                     activityLevel,
                     style: TextStyle(
-                        color: TColor.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700),
+                      color: TColor.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   Text(
                     helpFiCalorie,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: TColor.gray, fontSize: 12),
+                    style: TextStyle(
+                      color: TColor.gray,
+                      fontSize: 12,
+                    ),
                   ),
                   const Spacer(),
                   SizedBox(
@@ -157,10 +181,11 @@ class _ActivityLevelScreenState extends State<ActivityLevelScreen> {
                     title: "Confirm",
                     onPressed: () async {
                       double bmr = CalculateBMR.calculateBMR(
-                          widget.selectedWeight,
-                          widget.selectedHeight,
-                          widget.selectedAge,
-                          widget.selectedGender);
+                        widget.selectedWeight,
+                        widget.selectedHeight,
+                        widget.selectedAge,
+                        widget.selectedGender,
+                      );
                       dailyCalorieIntake = CalculateBMR()
                           .calculateDailyCalorieIntake(bmr, selectedTitle);
                       print(selectedTitle);
@@ -170,19 +195,21 @@ class _ActivityLevelScreenState extends State<ActivityLevelScreen> {
                       print(widget.selectedWeight);
                       print(dailyCalorieIntake);
                       await SignUpDataChannel.submitSignUpData(
-                          widget.username,
-                          widget.email,
-                          widget.password,
-                          widget.selectedGender,
-                          widget.selectedAge,
-                          widget.selectedWeight,
-                          widget.selectedHeight,
-                          selectedTitle,
-                          dailyCalorieIntake);
+                        widget.username,
+                        widget.email,
+                        widget.password,
+                        widget.selectedGender,
+                        widget.selectedAge,
+                        widget.selectedWeight,
+                        widget.selectedHeight,
+                        selectedTitle,
+                        dailyCalorieIntake,
+                      );
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const LoginScreen()),
+                          builder: (context) => const LoginScreen(),
+                        ),
                       );
                     },
                   ),
@@ -191,7 +218,7 @@ class _ActivityLevelScreenState extends State<ActivityLevelScreen> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
