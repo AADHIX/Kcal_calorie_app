@@ -5,6 +5,7 @@ import 'package:calory/src/features/authentication/screens/login_screen/login_sc
 import 'package:calory/src/features/authentication/screens/main_tab/main_tab_view.dart';
 import 'package:calory/src/features/authentication/screens/signup_screen/signup_screen.dart';
 import 'package:calory/src/features/authentication/screens/splash_screen/splash_screen.dart';
+import 'package:calory/src/features/authentication/screens/welcome_screen/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.system,
         home:
-            SignupScreen() //(username: 'Gokul', password: 'Gokul@123', email: 'gokul123@gmail.com'),
+            WelcomeScreen() //(username: 'Gokul', password: 'Gokul@123', email: 'gokul123@gmail.com'),
         );
   }
 }
